@@ -49,14 +49,14 @@ namespace Net.Myzuc.Illumination
             mso.WriteS32V(100);
             mso.WriteString32V(JsonConvert.SerializeObject(chat, new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore }));
             mso.WriteBool(overlay);
-            Send(mso.Get().ToArray());
+            Send(mso.Get());
         }
         public void Disconnect(ChatComponent chat)
         {
             using ContentStream mso = new();
             mso.WriteS32V(26);
             mso.WriteString32V(JsonConvert.SerializeObject(chat, new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore }));
-            Send(mso.Get().ToArray());
+            Send(mso.Get());
             Thread.Sleep(1000);
             Dispose();
         }
@@ -107,7 +107,7 @@ namespace Net.Myzuc.Illumination
                 using ContentStream mso = new();
                 mso.WriteS32V(35);
                 mso.WriteS64(DateTimeOffset.UtcNow.ToUnixTimeMilliseconds());
-                Send(mso.Get().ToArray());
+                Send(mso.Get());
                 TimeSpan span = LastKeepAlive + TimeSpan.FromSeconds(15) - DateTime.Now;
                 if (span.Ticks > 0) Thread.Sleep(span);
                 if (DateTime.Now < LastKeepAlive + TimeSpan.FromSeconds(30)) continue;

@@ -32,7 +32,7 @@ namespace Net.Myzuc.Illumination.Content.Entities
                     mso.WriteS32V(66);
                     mso.WriteS32V(eid);
                     mso.WriteU8((byte)(HeadYaw / 360.0f * 256.0f));
-                    client.Send(mso.Get().ToArray());
+                    client.Send(mso.Get());
                 }
             }
         }
@@ -57,7 +57,7 @@ namespace Net.Myzuc.Illumination.Content.Entities
                     mso.WriteU8((byte)(Position.Pitch / 360.0f * 256.0f));
                     mso.WriteU8((byte)(Position.Yaw / 360.0f * 256.0f));
                     mso.WriteBool(true);
-                    client.Send(mso.Get().ToArray());
+                    client.Send(mso.Get());
                 }
             }
         }
@@ -104,7 +104,7 @@ namespace Net.Myzuc.Illumination.Content.Entities
             mso.WriteU16(0);
             mso.WriteU16(0);
             mso.WriteU16(0);
-            client.Send(mso.Get().ToArray());
+            client.Send(mso.Get());
         }
         public void Unsubscribe(Client client)
         {
@@ -116,7 +116,7 @@ namespace Net.Myzuc.Illumination.Content.Entities
                 mso.WriteS32V(62);
                 mso.WriteS32V(1);
                 mso.WriteS32V(eid);
-                client.Send(mso.Get().ToArray());
+                client.Send(mso.Get());
             }
         }
         public void Update()
@@ -128,7 +128,7 @@ namespace Net.Myzuc.Illumination.Content.Entities
                 mso.WriteS32V(82);
                 mso.WriteS32V(eid);
                 Serialize(mso);
-                client.Send(mso.Get().ToArray());
+                client.Send(mso.Get());
             }
         }
         public void Dispose()

@@ -336,7 +336,7 @@ namespace Net.Myzuc.Illumination.Content.Game.World
                     mso.WriteUInt64(DeathLocation.Value.Location.Data);
                 }*/ //TODO: deatch location updateable seperate
                 mso.WriteS32V(0);
-                client.Send(mso.Get().ToArray());
+                client.Send(mso.Get());
             }
 
             //TODO:
@@ -345,14 +345,14 @@ namespace Net.Myzuc.Illumination.Content.Game.World
                 mso.WriteS32V(0x50);
                 mso.WriteU64(new Position(0, 64, 0).Value);
                 mso.WriteF32(0);
-                client.Send(mso.Get().ToArray());
+                client.Send(mso.Get());
             }
             using (ContentStream mso = new())
             {
                 mso.WriteS32V(78);
                 mso.WriteS32V(0);
                 mso.WriteS32V(0);
-                client.Send(mso.Get().ToArray());
+                client.Send(mso.Get());
             }
         }
         public void Unsubscribe(Client client)

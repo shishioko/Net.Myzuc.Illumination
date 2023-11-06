@@ -5,5 +5,4 @@ particles
 reorganize subdirs like chunk related stuff
 redesign for thread safety
 forget client login class and transfer id and stuff
-remove all toarray occurences from usages of client.send
 add plains biome to biome codec by default
