@@ -1,11 +1,9 @@
 ﻿chat
 entities
-dimensions
 particles
 
 reorganize subdirs like chunk related stuff
 redesign for thread safety
 forget client login class and transfer id and stuff
 remove all toarray occurences from usages of client.send
-replace all kvp loops with either key or value if only one is used
 add plains biome to biome codec by default

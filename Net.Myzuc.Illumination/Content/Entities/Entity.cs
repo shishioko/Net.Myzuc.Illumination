@@ -25,14 +25,14 @@ namespace Net.Myzuc.Illumination.Content.Entities
             set
             {
                 InternalHeadYaw = value;
-                foreach (KeyValuePair<Guid, Client> kvp in Subscribers)
+                foreach (Client client in Subscribers.Values)
                 {
-                    if (!kvp.Value.SubscribedEntities.TryGetValue(this, out int eid)) continue;
+                    if (!client.SubscribedEntities.TryGetValue(this, out int eid)) continue;
                     using ContentStream mso = new();
                     mso.WriteS32V(66);
                     mso.WriteS32V(eid);
                     mso.WriteU8((byte)(HeadYaw / 360.0f * 256.0f));
-                    kvp.Value.Send(mso.Get().ToArray());
+                    client.Send(mso.Get().ToArray());
                 }
             }
         }
@@ -45,9 +45,9 @@ namespace Net.Myzuc.Illumination.Content.Entities
             set
             {
                 InternalPosition = value;
-                foreach(KeyValuePair<Guid, Client> kvp in Subscribers)
+                foreach(Client client in Subscribers.Values)
                 {
-                    if (!kvp.Value.SubscribedEntities.TryGetValue(this, out int eid)) continue;
+                    if (!client.SubscribedEntities.TryGetValue(this, out int eid)) continue;
                     using ContentStream mso = new();
                     mso.WriteS32V(104);
                     mso.WriteS32V(eid);
@@ -57,7 +57,7 @@ namespace Net.Myzuc.Illumination.Content.Entities
                     mso.WriteU8((byte)(Position.Pitch / 360.0f * 256.0f));
                     mso.WriteU8((byte)(Position.Yaw / 360.0f * 256.0f));
                     mso.WriteBool(true);
-                    kvp.Value.Send(mso.Get().ToArray());
+                    client.Send(mso.Get().ToArray());
                 }
             }
         }
@@ -121,14 +121,14 @@ namespace Net.Myzuc.Illumination.Content.Entities
         }
         public void Update()
         {
-            foreach (KeyValuePair<Guid, Client> kvp in Subscribers)
+            foreach (Client client in Subscribers.Values)
             {
-                if (!kvp.Value.SubscribedEntities.TryGetValue(this, out int eid)) continue;
+                if (!client.SubscribedEntities.TryGetValue(this, out int eid)) continue;
                 using ContentStream mso = new();
                 mso.WriteS32V(82);
                 mso.WriteS32V(eid);
                 Serialize(mso);
-                kvp.Value.Send(mso.Get().ToArray());
+                client.Send(mso.Get().ToArray());
             }
         }
         public void Dispose()
