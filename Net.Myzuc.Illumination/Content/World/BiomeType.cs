@@ -2,7 +2,7 @@
 using System.Drawing;
 using System.Text.RegularExpressions;
 
-namespace Net.Myzuc.Illumination.Content.Game.World
+namespace Net.Myzuc.Illumination.Content.World
 {
     public sealed class BiomeType
     {

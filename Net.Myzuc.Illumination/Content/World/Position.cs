@@ -1,4 +1,4 @@
-﻿namespace Net.Myzuc.Illumination.Content.Game
+﻿namespace Net.Myzuc.Illumination.Content.World
 {
     public struct Position
     {

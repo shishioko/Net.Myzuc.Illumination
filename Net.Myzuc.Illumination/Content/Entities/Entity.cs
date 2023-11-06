@@ -1,5 +1,5 @@
 ﻿using Net.Myzuc.Illumination.Content.Chat;
-using Net.Myzuc.Illumination.Content.Game;
+using Net.Myzuc.Illumination.Content.Entities.Structs;
 using Net.Myzuc.Illumination.Net;
 using Newtonsoft.Json;
 using System;
@@ -45,7 +45,7 @@ namespace Net.Myzuc.Illumination.Content.Entities
             set
             {
                 InternalPosition = value;
-                foreach(Client client in Subscribers.Values)
+                foreach (Client client in Subscribers.Values)
                 {
                     if (!client.SubscribedEntities.TryGetValue(this, out int eid)) continue;
                     using ContentStream mso = new();
@@ -96,7 +96,7 @@ namespace Net.Myzuc.Illumination.Content.Entities
             mso.WriteF64(Position.X);
             mso.WriteF64(Position.Y);
             mso.WriteF64(Position.Z);
-            mso.WriteU8((byte)(Position.Pitch/360.0f*256.0f));
+            mso.WriteU8((byte)(Position.Pitch / 360.0f * 256.0f));
             mso.WriteU8((byte)(Position.Yaw / 360.0f * 256.0f));
             mso.WriteU8((byte)(HeadYaw / 360.0f * 256.0f));
             Serialize(mso);

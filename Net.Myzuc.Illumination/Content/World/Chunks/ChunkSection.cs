@@ -1,6 +1,6 @@
-﻿using Net.Myzuc.Illumination.Content.Game.World;
+﻿using Net.Myzuc.Illumination.Content.World;
 
-namespace Net.Myzuc.Illumination.Content.Game.Chunks
+namespace Net.Myzuc.Illumination.Content.World.Chunks
 {
     public sealed class ChunkSection
     {

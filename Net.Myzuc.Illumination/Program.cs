@@ -1,16 +1,13 @@
-﻿using Microsoft.VisualStudio.Threading;
-using Net.Myzuc.Illumination.Content.Chat;
+﻿using Net.Myzuc.Illumination.Content.Chat;
 using Net.Myzuc.Illumination.Content.Game;
-using Net.Myzuc.Illumination.Content.Game.Chunks;
-using Net.Myzuc.Illumination.Content.Game.World;
 using Net.Myzuc.Illumination.Content.Status;
-using Net.Myzuc.Illumination.Net;
+using Net.Myzuc.Illumination.Content.World;
+using Net.Myzuc.Illumination.Content.World.Chunks;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Net;
 using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace Net.Myzuc.Illumination
 {

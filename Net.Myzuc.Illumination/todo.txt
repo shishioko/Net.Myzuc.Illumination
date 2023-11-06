@@ -2,7 +2,6 @@
 entities
 particles
 
-reorganize subdirs like chunk related stuff
 redesign for thread safety
 forget client login class and transfer id and stuff
 add plains biome to biome codec by default

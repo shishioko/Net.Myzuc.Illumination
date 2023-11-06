@@ -1,4 +1,4 @@
-﻿using Net.Myzuc.Illumination.Content.Game.World;
+﻿using Net.Myzuc.Illumination.Content.World;
 using Net.Myzuc.Illumination.Net;
 using Net.Myzuc.Illumination.Util;
 using System;
@@ -7,7 +7,7 @@ using System.Diagnostics.Contracts;
 using System.Linq;
 using static System.Collections.Specialized.BitVector32;
 
-namespace Net.Myzuc.Illumination.Content.Game.Chunks
+namespace Net.Myzuc.Illumination.Content.World.Chunks
 {
     public sealed class BiomeSection
     {

@@ -1,4 +1,5 @@
-﻿using Net.Myzuc.Illumination.Content.Game.Chunks;
+﻿using Net.Myzuc.Illumination.Content.Game;
+using Net.Myzuc.Illumination.Content.World.Chunks;
 using Net.Myzuc.Illumination.Net;
 using System;
 using System.Collections.Generic;
@@ -6,7 +7,7 @@ using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace Net.Myzuc.Illumination.Content.Game.World
+namespace Net.Myzuc.Illumination.Content.World
 {
     public sealed class Dimension
     {

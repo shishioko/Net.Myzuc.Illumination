@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Net.Myzuc.Illumination.Content.Game.World
+namespace Net.Myzuc.Illumination.Content.Game
 {
     public sealed class Border
     {
@@ -22,7 +22,7 @@ namespace Net.Myzuc.Illumination.Content.Game.World
                 Span<byte> span = mso.Get();
                 lock (Subscribers)
                 {
-                    foreach(Client client in Subscribers.Values)
+                    foreach (Client client in Subscribers.Values)
                     {
                         client.Send(span);
                     }

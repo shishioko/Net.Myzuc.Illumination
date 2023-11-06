@@ -1,4 +1,5 @@
-﻿using Net.Myzuc.Illumination.Content.Game;
+﻿using Net.Myzuc.Illumination.Content.Entities.Structs;
+using Net.Myzuc.Illumination.Content.World;
 using Net.Myzuc.Illumination.Net;
 
 namespace Net.Myzuc.Illumination.Content.Entities

@@ -1,8 +1,8 @@
-﻿namespace Net.Myzuc.Illumination.Content.Game
+﻿namespace Net.Myzuc.Illumination.Content.Entities.Structs
 {
-    public struct SkinFlags
+    public struct EntityFlags
     {
-        public bool Cape
+        public bool IsOnFire
         {
             get
             {
@@ -14,7 +14,7 @@
                 if (value) Value |= 1;
             }
         }
-        public bool Jacket
+        public bool IsCrouching
         {
             get
             {
@@ -26,19 +26,7 @@
                 if (value) Value |= 2;
             }
         }
-        public bool LeftSleeve
-        {
-            get
-            {
-                return (Value & 4) > 0;
-            }
-            set
-            {
-                Value &= 255 - 4;
-                if (value) Value |= 4;
-            }
-        }
-        public bool RightSleeve
+        public bool IsSprinting
         {
             get
             {
@@ -50,7 +38,7 @@
                 if (value) Value |= 8;
             }
         }
-        public bool LeftLeg
+        public bool IsSwimming
         {
             get
             {
@@ -62,7 +50,7 @@
                 if (value) Value |= 16;
             }
         }
-        public bool RightLeg
+        public bool IsInvisible
         {
             get
             {
@@ -74,7 +62,7 @@
                 if (value) Value |= 32;
             }
         }
-        public bool Hat
+        public bool IsGlowing
         {
             get
             {
@@ -86,8 +74,20 @@
                 if (value) Value |= 64;
             }
         }
+        public bool IsFallFlying
+        {
+            get
+            {
+                return (Value & 128) > 0;
+            }
+            set
+            {
+                Value &= 255 - 128;
+                if (value) Value |= 128;
+            }
+        }
         public byte Value { get; private set; }
-        public SkinFlags()
+        public EntityFlags()
         {
             Value = 0;
         }

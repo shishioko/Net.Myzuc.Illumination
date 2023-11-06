@@ -3,7 +3,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics.Contracts;
 using System.Text.RegularExpressions;
 
-namespace Net.Myzuc.Illumination.Content.Game.World
+namespace Net.Myzuc.Illumination.Content.World
 {
     public sealed class DimensionType
     {

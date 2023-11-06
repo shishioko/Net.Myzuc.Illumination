@@ -2,7 +2,7 @@
 using System;
 using System.Diagnostics.Contracts;
 
-namespace Net.Myzuc.Illumination.Content.Game.Chunks
+namespace Net.Myzuc.Illumination.Content.World.Chunks
 {
     public sealed class Heightmap
     {
@@ -11,7 +11,7 @@ namespace Net.Myzuc.Illumination.Content.Game.Chunks
         public Heightmap(int height)
         {
             byte bits = 0;
-            for (int i = ((height / 16) << 4) - 1; i != 0; i >>= 1) bits++;
+            for (int i = (height / 16 << 4) - 1; i != 0; i >>= 1) bits++;
             Data = new(bits, 256);
             Updated = false;
         }
@@ -23,7 +23,7 @@ namespace Net.Myzuc.Illumination.Content.Game.Chunks
                 Contract.Requires(z >= 0);
                 Contract.Requires(x < 16);
                 Contract.Requires(z < 16);
-                int i = (x << 4) | z;
+                int i = x << 4 | z;
                 lock (Data)
                 {
                     return Data[i];
@@ -36,7 +36,7 @@ namespace Net.Myzuc.Illumination.Content.Game.Chunks
                 Contract.Requires(x < 16);
                 Contract.Requires(z < 16);
                 Contract.Requires(value < 16);
-                int i = (x << 4) | z;
+                int i = x << 4 | z;
                 lock (Data)
                 {
                     if (Data[i] == value) return;

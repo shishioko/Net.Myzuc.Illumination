@@ -1,4 +1,5 @@
-﻿using Net.Myzuc.Illumination.Content.Game.World;
+﻿using Net.Myzuc.Illumination.Content.Game;
+using Net.Myzuc.Illumination.Content.World;
 using Net.Myzuc.Illumination.Net;
 using Net.Myzuc.Illumination.Util;
 using System;
@@ -6,7 +7,7 @@ using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
 
-namespace Net.Myzuc.Illumination.Content.Game.Chunks
+namespace Net.Myzuc.Illumination.Content.World.Chunks
 {
     public sealed class Chunk
     {
@@ -223,7 +224,7 @@ namespace Net.Myzuc.Illumination.Content.Game.Chunks
                         if (blocks.Updates.Count > 1)
                         {
                             mso.WriteS32V(67);
-                            mso.WriteU64(((ulong)(long)(i + Type.SectionDepth) & 1048575) | (((ulong)(long)Z & 4194303) << 20) | (((ulong)(long)X & 4194303) << 42));
+                            mso.WriteU64((ulong)(long)(i + Type.SectionDepth) & 1048575 | ((ulong)(long)Z & 4194303) << 20 | ((ulong)(long)X & 4194303) << 42);
                             mso.WriteS32V(blocks.Updates.Count);
                             foreach (KeyValuePair<int, ushort> kvp in blocks.Updates)
                             {
@@ -234,7 +235,7 @@ namespace Net.Myzuc.Illumination.Content.Game.Chunks
                         {
                             KeyValuePair<int, ushort> kvp = blocks.Updates.First();
                             mso.WriteS32V(10);
-                            mso.WriteU64(new Position((kvp.Key >> 8) + (X * 16), (kvp.Key & 15) + (i * 16), ((kvp.Key >> 4) & 15) + (Z * 16)).Value);
+                            mso.WriteU64(new Position((kvp.Key >> 8) + X * 16, (kvp.Key & 15) + i * 16, (kvp.Key >> 4 & 15) + Z * 16).Value);
                             mso.WriteS32V(kvp.Value);
                         }
                         blocks.Updates.Clear();

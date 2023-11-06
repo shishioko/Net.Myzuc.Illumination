@@ -1,8 +1,8 @@
 ﻿using Net.Myzuc.Illumination.Content.Chat;
 using Net.Myzuc.Illumination.Content.Entities;
 using Net.Myzuc.Illumination.Content.Game;
-using Net.Myzuc.Illumination.Content.Game.Chunks;
-using Net.Myzuc.Illumination.Content.Game.World;
+using Net.Myzuc.Illumination.Content.World;
+using Net.Myzuc.Illumination.Content.World.Chunks;
 using Net.Myzuc.Illumination.Net;
 using Newtonsoft.Json;
 using System;

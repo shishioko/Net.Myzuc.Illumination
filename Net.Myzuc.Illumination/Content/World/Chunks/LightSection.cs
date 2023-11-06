@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.Contracts;
 
-namespace Net.Myzuc.Illumination.Content.Game.Chunks
+namespace Net.Myzuc.Illumination.Content.World.Chunks
 {
     public sealed class LightSection
     {

@@ -1,4 +1,4 @@
-﻿namespace Net.Myzuc.Illumination.Content.Game
+﻿namespace Net.Myzuc.Illumination.Content.Entities.Structs
 {
     public struct EntityPosition
     {
