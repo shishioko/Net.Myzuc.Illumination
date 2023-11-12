@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
 
@@ -17,7 +18,9 @@ namespace Net.Myzuc.Illumination.Base
         public event Action Disposed;
         public Guid Id { get; }
         public string Name { get; }
-        public DateTime LastKeepAlive { get; private set; }
+        public bool Encrypted { get; }
+        public ReadOnlyCollection<Property> Properties { get; }
+
         public bool Hardcore { get; set; }
         public byte Gamemode { get; set; } //TODO: updateable
         public bool ReducedDebugInfo { get; set; }
@@ -28,21 +31,29 @@ namespace Net.Myzuc.Illumination.Base
         internal Dimension? Dimension { get; set; }
         internal Border? Border { get; set; }
         internal Tablist? Tablist { get; set; }
+
+        private Connection Connection { get; }
         private ConcurrentQueue<byte[]> PacketQueue { get; }
         private SemaphoreSlim PacketSemaphore { get; }
+        public DateTime LastKeepAlive { get; private set; }
         internal Client(LoginRequest login)
         {
             Disposed = () => { };
             Id = login.Id;
             Name = login.Name;
-            LastKeepAlive = DateTime.Now;
+            Encrypted = login.Encrypted;
+            Properties = login.Properties;
+
             SubscribedEntities = new();
             SubscribedEntityIds = new();
             Chunks = new();
             Bossbars = new();
+
+            Connection = login.Connection;
             PacketQueue = new();
             PacketSemaphore = new(1, 1);
-            login.Connection.Disposed += Dispose;
+            Connection.Disposed += Dispose;
+            LastKeepAlive = DateTime.Now;
         }
         public void Message(ChatComponent chat, bool overlay = false)
         {
@@ -63,8 +74,8 @@ namespace Net.Myzuc.Illumination.Base
         }
         public void Dispose()
         {
-            if (Login.Connection.IsDisposed) return;
-            Login.Connection.Disposed -= Dispose;
+            if (Connection.IsDisposed) return;
+            Connection.Disposed -= Dispose;
             while (!SubscribedEntities.IsEmpty)
             {
                 Entity entity = SubscribedEntities.First().Key;
@@ -92,18 +103,18 @@ namespace Net.Myzuc.Illumination.Base
             Border?.UnsubscribeQuietly(this);
             Tablist?.UnsubscribeQuietly(this);
             PacketSemaphore.Dispose();
-            Login.Connection.Dispose();
+            Connection.Dispose();
             Disposed();
         }
         internal void Send(Span<byte> data)
         {
-            if (Login.Connection.IsDisposed) throw new ObjectDisposedException(nameof(Client));
+            if (Connection.IsDisposed) return;
             PacketQueue.Enqueue(data.ToArray());
             if (PacketSemaphore.Wait(0)) ThreadPool.QueueUserWorkItem(ProcessOutgoingPackets);
         }
         internal void KeepAlive(object? _)
         {
-            while (!Login.Connection.IsDisposed)
+            while (!Connection.IsDisposed)
             {
                 using ContentStream mso = new();
                 mso.WriteS32V(35);
@@ -119,9 +130,9 @@ namespace Net.Myzuc.Illumination.Base
         {
             try
             {
-                while (!Login.Connection.IsDisposed)
+                while (!Connection.IsDisposed)
                 {
-                    Span<byte> data = Login.Connection.Receive();
+                    Span<byte> data = Connection.Receive();
                     ContentStream msi = new(data);
                     int d = msi.ReadS32V();
                     switch (d)
@@ -140,7 +151,7 @@ namespace Net.Myzuc.Illumination.Base
             }
             catch (Exception ex)
             {
-                Login.Connection.Throw(ex);
+                Connection.Throw(ex);
             }
         }
         private void ProcessOutgoingPackets(object? _)
@@ -149,13 +160,13 @@ namespace Net.Myzuc.Illumination.Base
             {
                 while (PacketQueue.TryDequeue(out byte[]? data))
                 {
-                    Login.Connection.Send(data);
+                    Connection.Send(data);
                 }
                 PacketSemaphore.Release();
             }
             catch (Exception ex)
             {
-                Login.Connection.Throw(ex);
+                Connection.Throw(ex);
             }
         }
     }
