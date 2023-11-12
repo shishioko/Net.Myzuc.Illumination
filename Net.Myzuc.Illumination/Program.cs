@@ -2,7 +2,6 @@
 using Net.Myzuc.Illumination.Content.Chat;
 using Net.Myzuc.Illumination.Content.Status;
 using Net.Myzuc.Illumination.Content.World;
-using Net.Myzuc.Illumination.Content.World.Chunks;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
