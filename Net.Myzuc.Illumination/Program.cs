@@ -1,5 +1,6 @@
 ﻿using Net.Myzuc.Illumination.Chat;
 using Net.Myzuc.Illumination.Content;
+using Net.Myzuc.Illumination.Content.Structs;
 using Net.Myzuc.Illumination.Content.World;
 using System;
 using System.Collections.Generic;
@@ -83,33 +84,31 @@ namespace Net.Myzuc.Illumination
                         DimensionType dimensiontype = new("myzuc:subspace", 16, 0, biomes.AsReadOnly());
                         Dimension dimension = new("myzuc:subspace_0", dimensiontype, 0, false);
                         dimension.Subscribe(client);
+
                         Tablist tab = new();
                         tab.Subscribe(client);
-                        tab.Header = new ChatText("mayonaise is superior!!1");
-                        TablistEntry entry0 = new(Guid.NewGuid())
-                        {
-                            InternalName = "mate27",
-                            Gamemode = 3,
-                            Display = new ChatText("[healer] mate27"),
-                            Latency = -1,
-                            Visible = true,
-                        };
+                        tab.Header.PostUpdate = new ChatText("mayonaise is superior!!1");
+
+                        TablistEntry entry0 = new(Guid.NewGuid(), "mate27", new());
+                        entry0.Gamemode.PostUpdate = Gamemode.Spectator;
+                        entry0.Display.PostUpdate = new ChatText("[healer] mate27");
+                        entry0.Latency.PostUpdate = -1;
+                        entry0.Update();
                         entry0.Subscribe(tab);
-                        TablistEntry entry1 = new(Guid.NewGuid())
-                        {
-                            InternalName = "gay",
-                            Gamemode = 1,
-                            Display = new ChatText("ur gay"),
-                            Latency = 20,
-                            Visible = true,
-                        };
+
+                        TablistEntry entry1 = new(Guid.NewGuid(), "gay", new());
+                        entry1.Gamemode.PostUpdate = Gamemode.Creative;
+                        entry1.Display.PostUpdate = new ChatText("ur gay");
+                        entry1.Latency.PostUpdate = 20;
+                        entry1.Update();
                         entry1.Subscribe(tab);
-                        Bossbar bossbar = new(Guid.NewGuid())
-                        {
-                            Title = new ChatText("baguet'"),
-                            DarkSky = true,
-                        };
+
+                        Bossbar bossbar = new(Guid.NewGuid());
+                        bossbar.Title.PostUpdate = new ChatText("baguet'");
+                        bossbar.Flags.PostUpdate.DarkenSky = true;
+                        bossbar.Update();
                         bossbar.Subscribe(client);
+
                         List<Chunk> chunks = new();
                         for (int cx = -5; cx <= 5; cx++)
                         {
@@ -136,18 +135,21 @@ namespace Net.Myzuc.Illumination
                                     chunk[3].Blocks[x, 15, z] = 2;
                                 }
                             }
-                            chunk.Tick();
+                            chunk.Update();
                         }
                         client.Message(new ChatText("System Test Message"));
+
                         Border border = new();
-                        border.Diameter = 200;
-                        border.TargetDiameter = 200;
-                        border.TargetTime = DateTime.UnixEpoch;
-                        border.WarningDistance = 20;
-                        border.WarningTime = 0;
+                        border.Diameter.PostUpdate = 200;
+                        border.TargetDiameter.PostUpdate = 200;
+                        border.TargetTime.PostUpdate = TimeSpan.Zero;
+                        border.WarningDistance.PostUpdate = 20;
+                        border.WarningTime.PostUpdate = 0;
+                        border.Update();
                         border.Subscribe(client);
-                        border.TargetDiameter = 5;
-                        border.TargetTime = DateTime.Now.AddSeconds(30);
+                        border.TargetDiameter.PostUpdate = 5;
+                        border.TargetTime.PostUpdate = TimeSpan.FromSeconds(30);
+                        border.Update();
                     };
                     connection.Disposed += () =>
                     {

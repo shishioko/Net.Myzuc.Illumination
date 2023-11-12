@@ -26,12 +26,12 @@ namespace Net.Myzuc.Illumination.Content
             Notches12 = 3,
             Notches20 = 4
         }
-        public struct BossbarFlags
+        public class BossbarFlags
         {
             internal byte Bitmap = 0;
             public bool DarkenSky
             {
-                readonly get
+                get
                 {
                     return (Bitmap & 1) != 0;
                 }
@@ -42,7 +42,7 @@ namespace Net.Myzuc.Illumination.Content
             }
             public bool EndMusic
             {
-                readonly get
+                get
                 {
                     return (Bitmap & 2) != 0;
                 }
@@ -53,7 +53,7 @@ namespace Net.Myzuc.Illumination.Content
             }
             public bool Fog
             {
-                readonly get
+                get
                 {
                     return (Bitmap & 4) != 0;
                 }
@@ -62,7 +62,7 @@ namespace Net.Myzuc.Illumination.Content
                     Bitmap = (byte)((Bitmap & 251) | (value ? 4 : 0));
                 }
             }
-            public BossbarFlags()
+            internal BossbarFlags()
             {
 
             }
