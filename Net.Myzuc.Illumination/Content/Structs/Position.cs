@@ -1,4 +1,4 @@
-﻿namespace Net.Myzuc.Illumination.Content.World
+﻿namespace Net.Myzuc.Illumination.Content.Structs
 {
     public struct Position
     {

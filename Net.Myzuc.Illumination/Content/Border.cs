@@ -7,13 +7,13 @@ namespace Net.Myzuc.Illumination.Content
     public sealed class Border : Subscribeable<Client>, IUpdateable
     {
         private readonly Object Lock = new();
-        private Updateable<double> X { get; }
-        private Updateable<double> Z { get; }
-        private Updateable<double> Diameter { get; }
-        private Updateable<double> TargetDiameter { get; }
-        private Updateable<TimeSpan> TargetTime { get; }
-        private Updateable<int> WarningDistance { get; }
-        private Updateable<int> WarningTime { get; }
+        public Updateable<double> X { get; }
+        public Updateable<double> Z { get; }
+        public Updateable<double> Diameter { get; }
+        public Updateable<double> TargetDiameter { get; }
+        public Updateable<TimeSpan> TargetTime { get; }
+        public Updateable<int> WarningDistance { get; }
+        public Updateable<int> WarningTime { get; }
         public Border()
         {
             X = new(0.0d, Lock);

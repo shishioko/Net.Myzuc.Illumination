@@ -14,8 +14,8 @@ namespace Net.Myzuc.Illumination.Content
     {
         public Guid Id { get; } = Guid.NewGuid();
         private object Lock { get; } = new();
-        private Updateable<ChatComponent> Header { get; set; }
-        private Updateable<ChatComponent> Footer { get; set; }
+        public Updateable<ChatComponent> Header { get; set; }
+        public Updateable<ChatComponent> Footer { get; set; }
         internal Dictionary<Guid, TablistEntry> Entries { get; }
         public Tablist()
         {

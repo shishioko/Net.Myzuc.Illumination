@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 
-namespace Net.Myzuc.Illumination.Content.Status
+namespace Net.Myzuc.Illumination.Status
 {
     public sealed class ServerStatus
     {

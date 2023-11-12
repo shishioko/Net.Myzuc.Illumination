@@ -1,5 +1,4 @@
-﻿chat
-entities
+﻿entities
 particles
 
 redesign for thread safety
@@ -18,8 +17,13 @@ merge tablistentry into tablist
 
 "added a standardized object subscription interface, implemented update bundling model, added some enums "
 
-replace dimensiontype effects with enum
+replace dimensiontype effects and stuff with enum
 recheck limitation checks 
 nan border
-move initializations up in file if possible
 readonly getters
+make chunks obey updates too
+move to assigning stuff instead of subscribing
+cache stringified chat and stuff objects
+
+item preview and entity preview for chat: fix
+tablist keep track publicly of entries

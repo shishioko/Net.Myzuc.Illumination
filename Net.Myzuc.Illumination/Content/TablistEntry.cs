@@ -25,11 +25,11 @@ namespace Net.Myzuc.Illumination.Content
         }
         public object Lock { get; } = new();
         public Guid Id { get; }
-        internal string Name { get; }
-        internal IReadOnlyCollection<Property> Properties { get; }
-        internal Updateable<Gamemode> Gamemode { get; }
-        internal Updateable<int> Latency { get; }
-        internal Updateable<ChatComponent?> Display { get; }
+        public string Name { get; }
+        public IReadOnlyCollection<Property> Properties { get; }
+        public Updateable<Gamemode> Gamemode { get; }
+        public Updateable<int> Latency { get; }
+        public Updateable<ChatComponent?> Display { get; }
         public TablistEntry(Guid id, string name, Collection<Property> properties)
         {
             Id = id;

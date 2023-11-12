@@ -1,4 +1,5 @@
-﻿using Net.Myzuc.Illumination.Content.World;
+﻿using Net.Myzuc.Illumination.Content.Structs;
+using Net.Myzuc.Illumination.Content.World;
 using Net.Myzuc.Illumination.Net;
 using Net.Myzuc.Illumination.Util;
 using System;
