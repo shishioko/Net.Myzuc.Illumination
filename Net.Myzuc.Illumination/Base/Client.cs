@@ -63,13 +63,13 @@ namespace Net.Myzuc.Illumination.Base
             mso.WriteBool(overlay);
             Send(mso.Get());
         }
-        public void Disconnect(ChatComponent chat)
+        public void Disconnect(ChatComponent chat, TimeSpan? delay = null)
         {
             using ContentStream mso = new();
             mso.WriteS32V(26);
             mso.WriteString32V(JsonConvert.SerializeObject(chat, new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore }));
             Send(mso.Get());
-            Thread.Sleep(1000);
+            Thread.Sleep(delay ?? TimeSpan.FromSeconds(1));
             Dispose();
         }
         public void Dispose()
