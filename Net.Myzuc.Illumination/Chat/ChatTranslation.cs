@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
 
-namespace Net.Myzuc.Illumination.Content.Chat
+namespace Net.Myzuc.Illumination.Chat
 {
     public sealed class ChatTranslation : ChatComponent
     {

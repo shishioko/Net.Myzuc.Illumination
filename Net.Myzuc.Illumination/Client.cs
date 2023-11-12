@@ -1,4 +1,5 @@
-﻿using Net.Myzuc.Illumination.Content;
+﻿using Net.Myzuc.Illumination.Chat;
+using Net.Myzuc.Illumination.Content;
 using Net.Myzuc.Illumination.Content.Chat;
 using Net.Myzuc.Illumination.Content.Entities;
 using Net.Myzuc.Illumination.Content.World;

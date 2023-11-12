@@ -11,9 +11,9 @@ using System.Security.Cryptography;
 using System.Text;
 using Newtonsoft.Json;
 using System.Text.Json;
-using Net.Myzuc.Illumination.Content.Chat;
 using Microsoft.VisualStudio.Threading;
 using System.Threading;
+using Net.Myzuc.Illumination.Chat;
 
 namespace Net.Myzuc.Illumination
 {

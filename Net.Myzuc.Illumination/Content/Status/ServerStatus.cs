@@ -1,4 +1,4 @@
-﻿using Net.Myzuc.Illumination.Content.Chat;
+﻿using Net.Myzuc.Illumination.Chat;
 using Newtonsoft.Json;
 
 namespace Net.Myzuc.Illumination.Content.Status

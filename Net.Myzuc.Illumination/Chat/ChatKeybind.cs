@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Net.Myzuc.Illumination.Content.Chat
+namespace Net.Myzuc.Illumination.Chat
 {
     internal sealed class ChatKeybind : ChatComponent
     {
