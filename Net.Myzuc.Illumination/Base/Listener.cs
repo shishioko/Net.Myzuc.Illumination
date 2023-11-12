@@ -3,7 +3,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 
-namespace Net.Myzuc.Illumination
+namespace Net.Myzuc.Illumination.Base
 {
     public sealed class Listener : IDisposable
     {

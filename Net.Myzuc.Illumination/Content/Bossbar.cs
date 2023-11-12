@@ -3,6 +3,7 @@ using Net.Myzuc.Illumination.Net;
 using Newtonsoft.Json;
 using Net.Myzuc.Illumination.Chat;
 using Net.Myzuc.Illumination.Util;
+using Net.Myzuc.Illumination.Base;
 
 namespace Net.Myzuc.Illumination.Content
 {

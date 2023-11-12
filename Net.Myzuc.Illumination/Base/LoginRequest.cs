@@ -14,6 +14,7 @@ using System.Text.Json;
 using Microsoft.VisualStudio.Threading;
 using System.Threading;
 using Net.Myzuc.Illumination.Chat;
+using Net.Myzuc.Illumination.Base;
 
 namespace Net.Myzuc.Illumination
 {

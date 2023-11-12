@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 using Net.Myzuc.Illumination.Chat;
 using Net.Myzuc.Illumination.Status;
 
-namespace Net.Myzuc.Illumination
+namespace Net.Myzuc.Illumination.Base
 {
     public sealed class Connection : IDisposable
     {
@@ -153,7 +153,7 @@ namespace Net.Myzuc.Illumination
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Throw(ex);
             }

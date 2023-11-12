@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using static Net.Myzuc.Illumination.Content.TablistEntry;
 using System.Xml.Linq;
+using Net.Myzuc.Illumination.Base;
 
 namespace Net.Myzuc.Illumination.Content
 {
