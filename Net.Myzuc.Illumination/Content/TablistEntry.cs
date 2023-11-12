@@ -9,8 +9,6 @@ namespace Net.Myzuc.Illumination.Content
     public sealed class TablistEntry
     {
         public Guid Id { get; }
-
-
         public string Name
         {
             get
