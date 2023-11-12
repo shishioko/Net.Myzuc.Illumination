@@ -13,7 +13,7 @@ using System.Text.Json;
 using System.Threading;
 using Net.Myzuc.Illumination.Chat;
 using System.Collections.ObjectModel;
-using Net.Myzuc.Illumination.Util;
+using Net.Myzuc.Illumination.Content.Structs;
 
 namespace Net.Myzuc.Illumination.Base
 {

@@ -1,4 +1,4 @@
-﻿namespace Net.Myzuc.Illumination.Util
+﻿namespace Net.Myzuc.Illumination.Content.Structs
 {
     public readonly struct Property
     {
