@@ -1,25 +1,24 @@
 ﻿using Net.Myzuc.Illumination.Content.Structs;
 using Net.Myzuc.Illumination.Net;
 using Net.Myzuc.Illumination.Util;
+using System;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace Net.Myzuc.Illumination.Content.World
+namespace Net.Myzuc.Illumination.Content
 {
     public sealed class Dimension : Subscribeable<Client>
     {
         public string Name { get; }
         public DimensionType Type { get; }
-        public int SeedHash { get; }
-        public bool Flat { get; }
-        public Dimension(string name, DimensionType type, int seedHash, bool flat)
+        public int SeedHash { get; init; } = Random.Shared.Next();
+        public bool Flat { get; init; } = false;
+        public Dimension(string name, DimensionType type)
         {
             Contract.Requires(Regex.IsMatch(name, "[A-z:._-]"));
             Name = name;
             Type = type;
-            SeedHash = seedHash;
-            Flat = flat;
         }
         public override void Subscribe(Client client)
         {

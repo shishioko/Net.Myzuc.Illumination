@@ -4,7 +4,7 @@ using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace Net.Myzuc.Illumination.Content.World
+namespace Net.Myzuc.Illumination.Content
 {
     public sealed class DimensionType
     {

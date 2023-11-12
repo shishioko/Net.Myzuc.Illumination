@@ -1,7 +1,6 @@
 ﻿using Net.Myzuc.Illumination.Chat;
 using Net.Myzuc.Illumination.Content;
 using Net.Myzuc.Illumination.Content.Structs;
-using Net.Myzuc.Illumination.Content.World;
 using System;
 using System.Collections.Generic;
 using System.Drawing;

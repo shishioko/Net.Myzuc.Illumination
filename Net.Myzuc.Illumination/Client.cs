@@ -1,7 +1,6 @@
 ﻿using Net.Myzuc.Illumination.Chat;
 using Net.Myzuc.Illumination.Content;
 using Net.Myzuc.Illumination.Content.Entities;
-using Net.Myzuc.Illumination.Content.World;
 using Net.Myzuc.Illumination.Net;
 using Net.Myzuc.Illumination.Util;
 using Newtonsoft.Json;

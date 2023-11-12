@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Drawing;
 
-namespace Net.Myzuc.Illumination.Content.World
+namespace Net.Myzuc.Illumination.Content
 {
     public sealed class BiomeType
     {
