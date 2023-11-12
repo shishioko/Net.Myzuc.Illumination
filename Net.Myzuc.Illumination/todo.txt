@@ -1,8 +1,6 @@
 ﻿entities
 particles
 
-recheck limitation checks 
-nan border
 move to assigning stuff instead of subscribing
 
 item preview and entity preview for chat: fix
