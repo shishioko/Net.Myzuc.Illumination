@@ -4,7 +4,7 @@ using Net.Myzuc.Illumination.Net;
 using Newtonsoft.Json;
 using Net.Myzuc.Illumination.Content.Chat;
 
-namespace Net.Myzuc.Illumination.Content.Game
+namespace Net.Myzuc.Illumination.Content
 {
     public sealed class Bossbar
     {

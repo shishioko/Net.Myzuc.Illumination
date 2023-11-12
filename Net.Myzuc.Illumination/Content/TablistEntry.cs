@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 
-namespace Net.Myzuc.Illumination.Content.Game
+namespace Net.Myzuc.Illumination.Content
 {
     public sealed class TablistEntry
     {
@@ -39,7 +39,7 @@ namespace Net.Myzuc.Illumination.Content.Game
                 Span<byte> span = mso.Get();
                 lock (Subscribers)
                 {
-                    foreach(Tablist subscriber in Subscribers)
+                    foreach (Tablist subscriber in Subscribers)
                     {
                         lock (subscriber.Subscribers)
                         {
@@ -218,7 +218,7 @@ namespace Net.Myzuc.Illumination.Content.Game
             lock (Properties)
             {
                 mso.WriteS32V(Properties.Count);
-                foreach((string name, string value, string? signature) in Properties)
+                foreach ((string name, string value, string? signature) in Properties)
                 {
                     mso.WriteString32V(name);
                     mso.WriteString32V(value);

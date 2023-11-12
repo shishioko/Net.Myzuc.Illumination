@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 
-namespace Net.Myzuc.Illumination.Content.Game
+namespace Net.Myzuc.Illumination.Content
 {
     public sealed class Tablist
     {
@@ -86,8 +86,8 @@ namespace Net.Myzuc.Illumination.Content.Game
                 mso.WriteU8(61);
                 lock (Entries)
                 {
-                      mso.WriteS32V(Entries.Count);
-                    foreach(TablistEntry entry in Entries.Values)
+                    mso.WriteS32V(Entries.Count);
+                    foreach (TablistEntry entry in Entries.Values)
                     {
                         mso.WriteGuid(entry.Id);
                         mso.WriteString32V(entry.InternalName);

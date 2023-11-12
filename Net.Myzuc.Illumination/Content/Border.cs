@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Net.Myzuc.Illumination.Content.Game
+namespace Net.Myzuc.Illumination.Content
 {
     public sealed class Border
     {

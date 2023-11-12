@@ -1,5 +1,5 @@
-﻿using Net.Myzuc.Illumination.Content.Chat;
-using Net.Myzuc.Illumination.Content.Game;
+﻿using Net.Myzuc.Illumination.Content;
+using Net.Myzuc.Illumination.Content.Chat;
 using Net.Myzuc.Illumination.Content.Status;
 using Net.Myzuc.Illumination.Content.World;
 using Net.Myzuc.Illumination.Content.World.Chunks;
