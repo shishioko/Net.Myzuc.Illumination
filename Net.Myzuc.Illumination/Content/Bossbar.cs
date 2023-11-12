@@ -2,7 +2,6 @@
 using System;
 using Net.Myzuc.Illumination.Net;
 using Newtonsoft.Json;
-using Net.Myzuc.Illumination.Content.Chat;
 using Net.Myzuc.Illumination.Chat;
 
 namespace Net.Myzuc.Illumination.Content

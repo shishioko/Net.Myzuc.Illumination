@@ -9,3 +9,5 @@ add plains biome to biome codec by default
 add tick methods to classes to combine larger packet changes?
 
 add names to properties inside (a, b, c) inside classes like biometypes
+
+add enums to things like bossbar
