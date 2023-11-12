@@ -88,7 +88,7 @@ namespace Net.Myzuc.Illumination
                             },
                         };
                         DimensionType dimensiontype = new("myzuc:subspace", 16, 0, biomes.AsReadOnly());
-                        Dimension dimension = new("myzuc:subspace_0", dimensiontype, 0, false);
+                        Dimension dimension = new("myzuc:subspace_0", dimensiontype);
                         dimension.Subscribe(client);
 
                         Tablist tab = new();
