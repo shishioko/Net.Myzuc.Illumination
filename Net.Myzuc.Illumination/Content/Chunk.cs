@@ -1,11 +1,12 @@
-﻿using Net.Myzuc.Illumination.Net;
+﻿using Net.Myzuc.Illumination.Content.World;
+using Net.Myzuc.Illumination.Net;
 using Net.Myzuc.Illumination.Util;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
 
-namespace Net.Myzuc.Illumination.Content.World.Chunks
+namespace Net.Myzuc.Illumination.Content
 {
     public sealed class Chunk
     {
