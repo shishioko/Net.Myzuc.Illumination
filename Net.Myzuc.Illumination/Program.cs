@@ -1,13 +1,12 @@
 ﻿using Net.Myzuc.Illumination.Chat;
 using Net.Myzuc.Illumination.Content;
-using Net.Myzuc.Illumination.Content.Status;
 using Net.Myzuc.Illumination.Content.World;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Net;
 using System.Text.Json;
-using static Net.Myzuc.Illumination.Content.Status.ServerStatus;
+using static Net.Myzuc.Illumination.Status.ServerStatus;
 
 namespace Net.Myzuc.Illumination
 {

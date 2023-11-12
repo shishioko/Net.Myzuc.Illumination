@@ -5,8 +5,8 @@ using System.IO;
 using System.Net.Sockets;
 using System.IO.Compression;
 using Newtonsoft.Json;
-using Net.Myzuc.Illumination.Content.Status;
 using Net.Myzuc.Illumination.Chat;
+using Net.Myzuc.Illumination.Status;
 
 namespace Net.Myzuc.Illumination
 {
