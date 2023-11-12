@@ -96,6 +96,15 @@ namespace Net.Myzuc.Illumination
                             Visible = true,
                         };
                         entry0.Subscribe(tab);
+                        TablistEntry entry1 = new(Guid.NewGuid())
+                        {
+                            InternalName = "gay",
+                            Gamemode = 1,
+                            Display = new ChatText("ur gay"),
+                            Latency = 20,
+                            Visible = true,
+                        };
+                        entry1.Subscribe(tab);
                         Bossbar bossbar = new(Guid.NewGuid())
                         {
                             Title = new ChatText("baguet'"),
@@ -135,11 +144,11 @@ namespace Net.Myzuc.Illumination
                         border.Diameter = 200;
                         border.TargetDiameter = 200;
                         border.TargetTime = DateTime.UnixEpoch;
-                        border.WarningDistance = 5;
-                        border.WarningTime = 5;
+                        border.WarningDistance = 20;
+                        border.WarningTime = 0;
                         border.Subscribe(client);
                         border.TargetDiameter = 5;
-                        border.TargetTime = DateTime.Now.AddSeconds(5);
+                        border.TargetTime = DateTime.Now.AddSeconds(30);
                     };
                     connection.Disposed += () =>
                     {

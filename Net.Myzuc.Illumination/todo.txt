@@ -5,3 +5,5 @@ particles
 redesign for thread safety
 forget client login class and transfer id and stuff
 add plains biome to biome codec by default
+
+add tick methods to classes to combine larger packet changes?
