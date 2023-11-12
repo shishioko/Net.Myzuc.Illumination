@@ -11,3 +11,15 @@ add tick methods to classes to combine larger packet changes?
 add names to properties inside (a, b, c) inside classes like biometypes
 
 add enums to things like bossbar
+
+add iupdateable
+
+merge tablistentry into tablist
+
+"added a standardized object subscription interface, implemented update bundling model, added some enums "
+
+replace dimensiontype effects with enum
+recheck limitation checks 
+nan border
+move initializations up in file if possible
+readonly getters

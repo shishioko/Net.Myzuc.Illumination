@@ -3,6 +3,7 @@ using Net.Myzuc.Illumination.Content;
 using Net.Myzuc.Illumination.Content.Entities;
 using Net.Myzuc.Illumination.Content.World;
 using Net.Myzuc.Illumination.Net;
+using Net.Myzuc.Illumination.Util;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Concurrent;
@@ -12,8 +13,9 @@ using System.Threading;
 
 namespace Net.Myzuc.Illumination
 {
-    public sealed class Client : IDisposable
+    public sealed class Client : IDisposable, IIdentifiable
     {
+        public Guid Id => Login.Id;
         public event Action Disposed;
         public LoginRequest Login { get; }
         public DateTime LastKeepAlive { get; private set; }

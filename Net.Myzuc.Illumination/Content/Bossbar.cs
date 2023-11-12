@@ -1,202 +1,155 @@
-﻿using System.Collections.Generic;
-using System;
+﻿using System;
 using Net.Myzuc.Illumination.Net;
 using Newtonsoft.Json;
 using Net.Myzuc.Illumination.Chat;
+using Net.Myzuc.Illumination.Util;
 
 namespace Net.Myzuc.Illumination.Content
 {
-    public sealed class Bossbar
+    public sealed class Bossbar : Subscribeable<Client>, IUpdateable, IIdentifiable
     {
+        public enum BossbarColor : int
+        {
+            Pink = 0,
+            Blue = 1,
+            Red = 2,
+            Green = 3,
+            Yellow = 4,
+            Purple = 5,
+            White = 6
+        }
+        public enum BossbarDivision : int
+        {
+            None = 0,
+            Notches6 = 1,
+            Notches10 = 2,
+            Notches12 = 3,
+            Notches20 = 4
+        }
+        public struct BossbarFlags
+        {
+            internal byte Bitmap = 0;
+            public bool DarkenSky
+            {
+                readonly get
+                {
+                    return (Bitmap & 1) != 0;
+                }
+                set
+                {
+                    Bitmap = (byte)((Bitmap & 254) | (value ? 1 : 0));
+                }
+            }
+            public bool EndMusic
+            {
+                readonly get
+                {
+                    return (Bitmap & 2) != 0;
+                }
+                set
+                {
+                    Bitmap = (byte)((Bitmap & 253) | (value ? 2 : 0));
+                }
+            }
+            public bool Fog
+            {
+                readonly get
+                {
+                    return (Bitmap & 4) != 0;
+                }
+                set
+                {
+                    Bitmap = (byte)((Bitmap & 251) | (value ? 4 : 0));
+                }
+            }
+            public BossbarFlags()
+            {
+
+            }
+        }
+        private object Lock { get; } = new();
         public Guid Id { get; }
-        public ChatComponent InternalTitle { get; set; }
-        public float InternalHealth { get; set; }
-        public int InternalColor { get; set; }
-        public int InternalDivision { get; set; }
-        public byte InternalFlags { get; set; }
-        public ChatComponent Title
-        {
-            get
-            {
-                return InternalTitle;
-            }
-            set
-            {
-                InternalTitle = value;
-                using ContentStream mso = new();
-                mso.WriteS32V(11);
-                mso.WriteGuid(Id);
-                mso.WriteS32V(3);
-                mso.WriteString32V(JsonConvert.SerializeObject(InternalTitle, new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore }));
-                lock (Subscribers)
-                {
-                    foreach (Client client in Subscribers.Values)
-                    {
-                        client.Send(mso.Get());
-                    }
-                }
-            }
-        }
-        public float Health
-        {
-            get
-            {
-                return InternalHealth;
-            }
-            set
-            {
-                InternalHealth = value;
-                using ContentStream mso = new();
-                mso.WriteS32V(11);
-                mso.WriteGuid(Id);
-                mso.WriteS32V(2);
-                mso.WriteF32(InternalHealth);
-                lock (Subscribers)
-                {
-                    foreach (Client client in Subscribers.Values)
-                    {
-                        client.Send(mso.Get());
-                    }
-                }
-            }
-        }
-        public int Color
-        {
-            get
-            {
-                return InternalColor;
-            }
-            set
-            {
-                InternalColor = value;
-                using ContentStream mso = new();
-                mso.WriteS32V(11);
-                mso.WriteGuid(Id);
-                mso.WriteS32V(4);
-                mso.WriteS32V(InternalColor);
-                mso.WriteS32V(InternalDivision);
-                lock (Subscribers)
-                {
-                    foreach (Client client in Subscribers.Values)
-                    {
-                        client.Send(mso.Get());
-                    }
-                }
-            }
-        }
-        public int Division
-        {
-            get
-            {
-                return InternalDivision;
-            }
-            set
-            {
-                InternalDivision = value;
-                using ContentStream mso = new();
-                mso.WriteS32V(11);
-                mso.WriteGuid(Id);
-                mso.WriteS32V(4);
-                mso.WriteS32V(InternalColor);
-                mso.WriteS32V(InternalDivision);
-                lock (Subscribers)
-                {
-                    foreach (Client client in Subscribers.Values)
-                    {
-                        client.Send(mso.Get());
-                    }
-                }
-            }
-        }
-        public bool DarkSky
-        {
-            get
-            {
-                return (InternalFlags & 1) != 0;
-            }
-            set
-            {
-                InternalDivision &= ~1;
-                InternalDivision |= value ? 1 : 0;
-                using ContentStream mso = new();
-                mso.WriteS32V(11);
-                mso.WriteGuid(Id);
-                mso.WriteS32V(5);
-                mso.WriteS32V(InternalFlags);
-                lock (Subscribers)
-                {
-                    foreach (Client client in Subscribers.Values)
-                    {
-                        client.Send(mso.Get());
-                    }
-                }
-            }
-        }
-        public bool EndMusic
-        {
-            get
-            {
-                return (InternalFlags & 2) != 0;
-            }
-            set
-            {
-                InternalDivision &= ~2;
-                InternalDivision |= value ? 2 : 0;
-                using ContentStream mso = new();
-                mso.WriteS32V(11);
-                mso.WriteGuid(Id);
-                mso.WriteS32V(5);
-                mso.WriteS32V(InternalFlags);
-                lock (Subscribers)
-                {
-                    foreach (Client client in Subscribers.Values)
-                    {
-                        client.Send(mso.Get());
-                    }
-                }
-            }
-        }
-        public bool Fog
-        {
-            get
-            {
-                return (InternalFlags & 4) != 0;
-            }
-            set
-            {
-                InternalDivision &= ~4;
-                InternalDivision |= value ? 4 : 0;
-                using ContentStream mso = new();
-                mso.WriteS32V(11);
-                mso.WriteGuid(Id);
-                mso.WriteS32V(5);
-                mso.WriteS32V(InternalFlags);
-                lock (Subscribers)
-                {
-                    foreach (Client client in Subscribers.Values)
-                    {
-                        client.Send(mso.Get());
-                    }
-                }
-            }
-        }
-        private Dictionary<Guid, Client> Subscribers { get; }
+        public Updateable<ChatComponent> Title { get; }
+        public Updateable<float> Health { get; }
+        public Updateable<BossbarColor> Color { get; }
+        public Updateable<BossbarDivision> Division { get; }
+        public Updateable<BossbarFlags> Flags { get; }
         public Bossbar(Guid id)
         {
             Id = id;
-            InternalTitle = new ChatText(string.Empty);
-            InternalColor = 0;
-            InternalDivision = 0;
-            InternalFlags = 0;
-            Subscribers = new();
+            Health = new(0.0f, Lock);
+            Title = new(new ChatText(string.Empty), Lock);
+            Color = new(BossbarColor.Pink, Lock);
+            Division = new(BossbarDivision.None, Lock);
+            Flags = new(new BossbarFlags(), Lock);
         }
-
-        public void Subscribe(Client client)
+        public void Update()
         {
-            lock (Subscribers)
+            lock (Lock)
             {
-                Subscribers.Add(client.Login.Id, client);
+                if (Health.Updated)
+                {
+                    using ContentStream mso = new();
+                    mso.WriteS32V(11);
+                    mso.WriteGuid(Id);
+                    mso.WriteS32V(2);
+                    mso.WriteF32(Health.PostUpdate);
+                    Health.Update();
+                    byte[] msop = mso.Get().ToArray();
+                    Iterate((Client client) =>
+                    {
+                        client.Send(msop);
+                    });
+                }
+                if (Title.Updated)
+                {
+                    using ContentStream mso = new();
+                    mso.WriteS32V(11);
+                    mso.WriteGuid(Id);
+                    mso.WriteS32V(3);
+                    mso.WriteString32V(JsonConvert.SerializeObject(Title.PostUpdate, new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore }));
+                    Title.Update();
+                    byte[] msop = mso.Get().ToArray();
+                    Iterate((Client client) =>
+                    {
+                        client.Send(msop);
+                    }); 
+                }
+                if (Color.Updated || Division.Updated)
+                {
+                    using ContentStream mso = new();
+                    mso.WriteS32V(11);
+                    mso.WriteGuid(Id);
+                    mso.WriteS32V(4);
+                    mso.WriteS32V((int)Color.PostUpdate);
+                    mso.WriteS32V((int)Division.PostUpdate);
+                    Color.Update();
+                    Division.Update();
+                    byte[] msop = mso.Get().ToArray();
+                    Iterate((Client client) =>
+                    {
+                        client.Send(msop);
+                    });
+                }
+                if (Flags.Updated)
+                {
+                    using ContentStream mso = new();
+                    mso.WriteS32V(11);
+                    mso.WriteGuid(Id);
+                    mso.WriteS32V(5);
+                    mso.WriteU8(Flags.PostUpdate.Bitmap);
+                    Flags.Update();
+                    byte[] msop = mso.Get().ToArray();
+                    Iterate((Client client) =>
+                    {
+                        client.Send(msop);
+                    });
+                }
             }
+        }
+        public override void Subscribe(Client client)
+        {
+            base.Subscribe(client);
             lock (client.Bossbars)
             {
                 client.Bossbars.Add(Id, this);
@@ -205,19 +158,19 @@ namespace Net.Myzuc.Illumination.Content
             mso.WriteS32V(11);
             mso.WriteGuid(Id);
             mso.WriteS32V(0);
-            mso.WriteString32V(JsonConvert.SerializeObject(InternalTitle, new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore }));
-            mso.WriteF32(InternalHealth);
-            mso.WriteS32V(InternalColor);
-            mso.WriteS32V(InternalDivision);
-            mso.WriteU8(InternalFlags);
+            lock (Lock)
+            {
+                mso.WriteString32V(JsonConvert.SerializeObject(Title.PreUpdate, new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore }));
+                mso.WriteF32(Health.PreUpdate);
+                mso.WriteS32V((int)Color.PreUpdate);
+                mso.WriteS32V((int)Division.PreUpdate);
+                mso.WriteU8(Flags.PreUpdate.Bitmap);
+            }
             client.Send(mso.Get());
         }
-        public void Unsubscribe(Client client)
+        public override void Unsubscribe(Client client)
         {
-            lock (Subscribers)
-            {
-                if (!Subscribers.Remove(client.Login.Id)) return;
-            }
+            base.Unsubscribe(client);
             lock (client.Bossbars)
             {
                 client.Bossbars.Remove(Id);
@@ -228,12 +181,9 @@ namespace Net.Myzuc.Illumination.Content
             mso.WriteS32V(1);
             client.Send(mso.Get());
         }
-        public void UnsubscribeQuietly(Client client)
+        internal override void UnsubscribeQuietly(Client client)
         {
-            lock (Subscribers)
-            {
-                if (!Subscribers.Remove(client.Login.Id)) return;
-            }
+            base.UnsubscribeQuietly(client);
             lock (client.Bossbars)
             {
                 client.Bossbars.Remove(Id);

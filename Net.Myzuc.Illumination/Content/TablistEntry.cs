@@ -1,311 +1,143 @@
 ﻿using Net.Myzuc.Illumination.Chat;
+using Net.Myzuc.Illumination.Content.Structs;
 using Net.Myzuc.Illumination.Net;
+using Net.Myzuc.Illumination.Util;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace Net.Myzuc.Illumination.Content
 {
-    public sealed class TablistEntry
+    public sealed class TablistEntry : Subscribeable<Tablist>, IUpdateable, IIdentifiable
     {
+        public readonly struct Property
+        {
+            public readonly string Name;
+            public readonly string Value;
+            public readonly string? Signature;
+            public Property(string name, string value, string? signature)
+            {
+                Name = name;
+                Value = value;
+                Signature = signature;
+            }
+        }
+        public object Lock { get; } = new();
         public Guid Id { get; }
-        public string Name
-        {
-            get
-            {
-                return InternalName;
-            }
-            set
-            {
-                InternalName = value;
-                using ContentStream mso = new();
-                mso.WriteS32V(58);
-                mso.WriteU8(1);
-                mso.WriteS32V(1);
-                mso.WriteGuid(Id);
-                mso.WriteString32V(InternalName);
-                lock (Properties)
-                {
-                    mso.WriteS32V(Properties.Count);
-                    foreach ((string name, string pvalue, string? signature) in Properties)
-                    {
-                        mso.WriteString32V(name);
-                        mso.WriteString32V(pvalue);
-                        mso.WriteString32VN(signature);
-                    }
-                }
-                Span<byte> span = mso.Get();
-                lock (Subscribers)
-                {
-                    foreach (Tablist subscriber in Subscribers)
-                    {
-                        lock (subscriber.Subscribers)
-                        {
-                            foreach (Client client in subscriber.Subscribers.Values)
-                            {
-                                client.Send(span);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        public List<(string name, string value, string? signature)> Properties { get; set; }
-        public byte Gamemode
-        {
-            get
-            {
-                return InternalGamemode;
-            }
-            set
-            {
-                InternalGamemode = value;
-                using ContentStream mso = new();
-                mso.WriteS32V(58);
-                mso.WriteU8(4);
-                mso.WriteS32V(1);
-                mso.WriteGuid(Id);
-                mso.WriteS32V(InternalGamemode);
-                Span<byte> span = mso.Get();
-                lock (Subscribers)
-                {
-                    foreach (Tablist subscriber in Subscribers)
-                    {
-                        lock (subscriber.Subscribers)
-                        {
-                            foreach (Client client in subscriber.Subscribers.Values)
-                            {
-                                client.Send(span);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        public bool Visible
-        {
-            get
-            {
-                return InternalVisible;
-            }
-            set
-            {
-                InternalVisible = value;
-                using ContentStream mso = new();
-                mso.WriteS32V(58);
-                mso.WriteU8(8);
-                mso.WriteS32V(1);
-                mso.WriteGuid(Id);
-                mso.WriteBool(InternalVisible);
-                Span<byte> span = mso.Get();
-                lock (Subscribers)
-                {
-                    foreach (Tablist subscriber in Subscribers)
-                    {
-                        lock (subscriber.Subscribers)
-                        {
-                            foreach (Client client in subscriber.Subscribers.Values)
-                            {
-                                client.Send(span);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        public int Latency
-        {
-            get
-            {
-                return InternalLatency;
-            }
-            set
-            {
-                InternalLatency = value;
-                using ContentStream mso = new();
-                mso.WriteS32V(58);
-                mso.WriteU8(16);
-                mso.WriteS32V(1);
-                mso.WriteGuid(Id);
-                mso.WriteS32V(InternalLatency);
-                Span<byte> span = mso.Get();
-                lock (Subscribers)
-                {
-                    foreach (Tablist subscriber in Subscribers)
-                    {
-                        lock (subscriber.Subscribers)
-                        {
-                            foreach (Client client in subscriber.Subscribers.Values)
-                            {
-                                client.Send(span);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        public ChatComponent? Display
-        {
-            get
-            {
-                return InternalDisplay;
-            }
-            set
-            {
-                InternalDisplay = value;
-                using ContentStream mso = new();
-                mso.WriteS32V(58);
-                mso.WriteU8(32);
-                mso.WriteS32V(1);
-                mso.WriteGuid(Id);
-                ChatComponent? display = InternalDisplay;
-                mso.WriteBool(display is not null);
-                if (display is not null)
-                {
-                    mso.WriteString32V(JsonConvert.SerializeObject(display, new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore }));
-                }
-                Span<byte> span = mso.Get();
-                lock (Subscribers)
-                {
-                    foreach (Tablist subscriber in Subscribers)
-                    {
-                        lock (subscriber.Subscribers)
-                        {
-                            foreach (Client client in subscriber.Subscribers.Values)
-                            {
-                                client.Send(span);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        internal string InternalName { get; set; }
-        internal byte InternalGamemode { get; set; }
-        internal bool InternalVisible { get; set; }
-        internal int InternalLatency { get; set; }
-        internal ChatComponent? InternalDisplay { get; set; }
-        internal List<Tablist> Subscribers { get; }
-        public TablistEntry(Guid id)
+        internal string Name { get; }
+        internal IReadOnlyCollection<Property> Properties { get; }
+        internal Updateable<Gamemode> Gamemode { get; }
+        internal Updateable<int> Latency { get; }
+        internal Updateable<ChatComponent?> Display { get; }
+        public TablistEntry(Guid id, string name, Collection<Property> properties)
         {
             Id = id;
-            InternalName = string.Empty;
-            Properties = new();
-            InternalGamemode = 0;
-            InternalVisible = true;
-            InternalLatency = 0;
-            InternalDisplay = null;
-            Subscribers = new();
+            Name = name;
+            Properties = properties;
+            Gamemode = new(Structs.Gamemode.Survival, Lock);
+            Latency = new(-1, Lock);
+            Display = new(null, Lock);
         }
-        public void Subscribe(Tablist subscriber)
+        public void Update()
         {
-            lock (Subscribers)
+            lock (Lock)
             {
-                Subscribers.Add(subscriber);
+                if (!Gamemode.Updated && !Latency.Updated && !Display.Updated) return;
+                using ContentStream mso = new();
+                mso.WriteS32V(58);
+                mso.WriteU8((byte)((Gamemode.Updated ? 4 : 0) | (Latency.Updated ? 16 : 0) | (Display.Updated ? 32 : 0)));
+                mso.WriteS32V(1);
+                mso.WriteGuid(Id);
+                if (Gamemode.Updated)
+                {
+                    mso.WriteS32V((int)Gamemode.PostUpdate);
+                    Gamemode.Update();
+                }
+                if (Latency.Updated)
+                {
+                    mso.WriteS32V((int)Latency.PostUpdate);
+                    Latency.Update();
+                }
+                if (Display.Updated)
+                {
+                    mso.WriteBool(Display.PostUpdate is not null);
+                    if (Display.PostUpdate is not null)
+                    {
+                        mso.WriteString32V(JsonConvert.SerializeObject(Display.PostUpdate, new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore }));
+                    }
+                    Display.Update();
+                }
+                byte[] msop = mso.Get().ToArray();
+                Iterate((Tablist tablist) =>
+                {
+                    tablist.Iterate((Client client) =>
+                    {
+                        client.Send(msop);
+                    });
+                });
             }
-            lock (subscriber.Entries)
+        }
+        public override void Subscribe(Tablist tablist)
+        {
+            base.Subscribe(tablist);
+            lock (tablist.Entries)
             {
-                subscriber.Entries.Add(Id, this);
+                tablist.Entries.Add(Id, this);
             }
             using ContentStream mso = new();
             mso.WriteS32V(58);
             mso.WriteU8(61);
             mso.WriteS32V(1);
             mso.WriteGuid(Id);
-            mso.WriteString32V(InternalName);
-            lock (Properties)
+            lock (Lock)
             {
+                mso.WriteString32V(Name);
                 mso.WriteS32V(Properties.Count);
-                foreach ((string name, string value, string? signature) in Properties)
+                foreach (Property property in Properties)
                 {
-                    mso.WriteString32V(name);
-                    mso.WriteString32V(value);
-                    mso.WriteString32VN(signature);
+                    mso.WriteString32V(property.Name);
+                    mso.WriteString32V(property.Value);
+                    mso.WriteString32VN(property.Signature);
+                }
+                mso.WriteS32V((int)Gamemode.PreUpdate);
+                mso.WriteBool(true);
+                mso.WriteS32V(Latency.PreUpdate);
+                mso.WriteBool(Display.PreUpdate is not null);
+                if (Display.PreUpdate is not null)
+                {
+                    mso.WriteString32V(JsonConvert.SerializeObject(Display.PreUpdate, new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore }));
                 }
             }
-            mso.WriteS32V(InternalGamemode);
-            mso.WriteBool(InternalVisible);
-            mso.WriteS32V(InternalLatency);
-            ChatComponent? display = InternalDisplay;
-            mso.WriteBool(display is not null);
-            if (display is not null)
+            byte[] msop = mso.Get().ToArray();
+            tablist.Iterate((Client client) =>
             {
-                mso.WriteString32V(JsonConvert.SerializeObject(display, new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore }));
-            }
-            Span<byte> span = mso.Get();
-            lock (subscriber.Subscribers)
-            {
-                foreach (Client client in subscriber.Subscribers.Values)
-                {
-                    client.Send(span);
-                }
-            }
+                client.Send(msop);
+            });
         }
-        public void Unsubscribe(Tablist subscriber)
+        public override void Unsubscribe(Tablist tablist)
         {
-            lock (Subscribers)
+            base.Unsubscribe(tablist);
+            lock (tablist.Entries)
             {
-                if (!Subscribers.Remove(subscriber)) return;
-            }
-            lock (subscriber.Entries)
-            {
-                subscriber.Entries.Remove(Id);
+                tablist.Entries.Remove(Id);
             }
             using ContentStream mso = new();
             mso.WriteS32V(57);
             mso.WriteS32V(1);
             mso.WriteGuid(Id);
-            Span<byte> span = mso.Get();
-            lock (subscriber.Subscribers)
+            byte[] msop = mso.Get().ToArray();
+            tablist.Iterate((Client client) =>
             {
-                foreach (Client client in subscriber.Subscribers.Values)
-                {
-                    client.Send(span);
-                }
-            }
+                client.Send(msop);
+            });
         }
-        public void UnsubscribeQuietly(Tablist subscriber)
+        internal override void UnsubscribeQuietly(Tablist tablist)
         {
-            lock (Subscribers)
+            base.UnsubscribeQuietly(tablist);
+            lock (tablist.Entries)
             {
-                if (!Subscribers.Remove(subscriber)) return;
-            }
-            lock (subscriber.Entries)
-            {
-                subscriber.Entries.Remove(Id);
-            }
-        }
-        public void RefreshProperties()
-        {
-            using ContentStream mso = new();
-            mso.WriteS32V(58);
-            mso.WriteU8(1);
-            mso.WriteS32V(1);
-            mso.WriteGuid(Id);
-            mso.WriteString32V(InternalName);
-            lock (Properties)
-            {
-                mso.WriteS32V(Properties.Count);
-                foreach ((string name, string pvalue, string? signature) in Properties)
-                {
-                    mso.WriteString32V(name);
-                    mso.WriteString32V(pvalue);
-                    mso.WriteString32VN(signature);
-                }
-            }
-            Span<byte> span = mso.Get();
-            lock (Subscribers)
-            {
-                foreach (Tablist subscriber in Subscribers)
-                {
-                    lock (subscriber.Subscribers)
-                    {
-                        foreach (Client client in subscriber.Subscribers.Values)
-                        {
-                            client.Send(span);
-                        }
-                    }
-                }
+                tablist.Entries.Remove(Id);
             }
         }
     }

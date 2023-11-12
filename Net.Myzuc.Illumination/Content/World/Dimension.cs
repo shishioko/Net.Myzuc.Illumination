@@ -1,19 +1,17 @@
 ﻿using Net.Myzuc.Illumination.Net;
-using System;
-using System.Collections.Generic;
+using Net.Myzuc.Illumination.Util;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace Net.Myzuc.Illumination.Content.World
 {
-    public sealed class Dimension
+    public sealed class Dimension : Subscribeable<Client>
     {
         public string Name { get; }
         public DimensionType Type { get; }
         public int SeedHash { get; }
         public bool Flat { get; }
-        private Dictionary<Guid, Client> Subscribers { get; }
         public Dimension(string name, DimensionType type, int seedHash, bool flat)
         {
             Contract.Requires(Regex.IsMatch(name, "[A-z:._-]"));
@@ -21,14 +19,9 @@ namespace Net.Myzuc.Illumination.Content.World
             Type = type;
             SeedHash = seedHash;
             Flat = flat;
-            Subscribers = new();
         }
-        public void Subscribe(Client client)
+        public override void Subscribe(Client client)
         {
-            lock (Subscribers)
-            {
-                Subscribers.Add(client.Login.Id, client);
-            }
             client.Dimension = this;
             lock (client.Chunks)
             {
@@ -354,12 +347,14 @@ namespace Net.Myzuc.Illumination.Content.World
                 client.Send(mso.Get());
             }
         }
-        public void Unsubscribe(Client client)
+        public override void Unsubscribe(Client client)
         {
-            lock (Subscribers)
-            {
-                if (!Subscribers.Remove(client.Login.Id)) return;
-            }
+            base.Unsubscribe(client);
+            client.Dimension = null;
+        }
+        internal override void UnsubscribeQuietly(Client client)
+        {
+            base.UnsubscribeQuietly(client);
             client.Dimension = null;
         }
     }
