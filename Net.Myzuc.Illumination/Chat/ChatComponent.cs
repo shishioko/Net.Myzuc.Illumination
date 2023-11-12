@@ -5,7 +5,7 @@ namespace Net.Myzuc.Illumination.Chat
 {
     public abstract class ChatComponent
     {
-        public sealed class ClickEvent
+        public sealed class ClickEventInfo
         {
             [JsonProperty("open_url")]
             public string? OpenUrl { get; set; }
@@ -17,12 +17,12 @@ namespace Net.Myzuc.Illumination.Chat
             public int? ChangePage { get; set; }
             [JsonProperty("copy_to_clipboard")]
             public string? CopyToClipboard { get; set; }
-            public ClickEvent()
+            public ClickEventInfo()
             {
 
             }
         }
-        public sealed class HoverEvent
+        public sealed class HoverEventInfo
         {
             [JsonProperty("show_text")]
             public ChatComponent? ShowText { get; set; }
@@ -30,7 +30,7 @@ namespace Net.Myzuc.Illumination.Chat
             public ItemPreview? ShowItem { get; set; }
             [JsonProperty("show_entity")]
             public string? ShowEntity { get; set; }
-            public HoverEvent()
+            public HoverEventInfo()
             {
 
             }
@@ -52,9 +52,9 @@ namespace Net.Myzuc.Illumination.Chat
         [JsonProperty("insertion")]
         public string? Insertion { get; set; }
         [JsonProperty("clickEvent")]
-        public ClickEvent? ClickEvent { get; set; }
+        public ClickEventInfo? ClickEvent { get; set; }
         [JsonProperty("hoverEvent")]
-        public HoverEvent? HoverEvent { get; set; }
+        public HoverEventInfo? HoverEvent { get; set; }
         [JsonProperty("extra")]
         public IEnumerable<ChatComponent>? Extra { get; set; }
         public ChatComponent()

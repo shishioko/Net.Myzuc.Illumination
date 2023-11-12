@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Net;
 using System.Text.Json;
+using static Net.Myzuc.Illumination.Content.Status.ServerStatus;
 
 namespace Net.Myzuc.Illumination
 {

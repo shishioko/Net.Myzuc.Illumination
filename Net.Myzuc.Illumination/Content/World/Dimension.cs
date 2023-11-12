@@ -1,5 +1,4 @@
-﻿using Net.Myzuc.Illumination.Content.Game;
-using Net.Myzuc.Illumination.Net;
+﻿using Net.Myzuc.Illumination.Net;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
