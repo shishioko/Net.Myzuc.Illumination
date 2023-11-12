@@ -6,7 +6,7 @@ namespace Net.Myzuc.Illumination.Content
 {
     public sealed class Border : Subscribeable<Client>, IUpdateable
     {
-        private readonly Object Lock = new();
+        private readonly object Lock = new();
         public Updateable<double> X { get; }
         public Updateable<double> Z { get; }
         public Updateable<double> Diameter { get; }
