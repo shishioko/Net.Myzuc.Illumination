@@ -76,10 +76,17 @@ namespace Net.Myzuc.Illumination
                     auth.Success += (Client client) =>
                     {
                         Console.WriteLine($"[{endpoint}] [{connection.Endpoint}] Logged in.");
-                        List<BiomeType> biomes = new()
+                        List<BiomeType> biomes = new() 
                         {
-                            new("minecraft:plains", false, Color.Black, Color.MediumPurple, Color.DarkBlue, Color.Yellow, null, null, null, null, null, null),
-                            new("myzuc:nexusbiome", false, Color.MediumPurple, Color.MediumPurple, Color.Blue, Color.Yellow, null, null, null, null, null, null)
+                            new("minecraft:plains")
+                            {
+                                Precipitation = false,
+                                SkyColor = Color.Black,
+                                WaterFogColor = Color.MediumPurple,
+                                FogColor = Color.DarkBlue,
+                                WaterColor = Color.Yellow,
+                                AmbientSound = "minecraft:music.creative"
+                            },
                         };
                         DimensionType dimensiontype = new("myzuc:subspace", 16, 0, biomes.AsReadOnly());
                         Dimension dimension = new("myzuc:subspace_0", dimensiontype, 0, false);
@@ -89,14 +96,14 @@ namespace Net.Myzuc.Illumination
                         tab.Subscribe(client);
                         tab.Header.PostUpdate = new ChatText("mayonaise is superior!!1");
 
-                        TablistEntry entry0 = new(Guid.NewGuid(), "mate27", new());
+                        TablistEntry entry0 = new(Guid.NewGuid(), "mate27", null);
                         entry0.Gamemode.PostUpdate = Gamemode.Spectator;
                         entry0.Display.PostUpdate = new ChatText("[healer] mate27");
                         entry0.Latency.PostUpdate = -1;
                         entry0.Update();
                         entry0.Subscribe(tab);
 
-                        TablistEntry entry1 = new(Guid.NewGuid(), "gay", new());
+                        TablistEntry entry1 = new(Guid.NewGuid(), "gay", null);
                         entry1.Gamemode.PostUpdate = Gamemode.Creative;
                         entry1.Display.PostUpdate = new ChatText("ur gay");
                         entry1.Latency.PostUpdate = 20;

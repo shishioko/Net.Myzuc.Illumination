@@ -30,11 +30,11 @@ namespace Net.Myzuc.Illumination.Content
         public Updateable<Gamemode> Gamemode { get; }
         public Updateable<int> Latency { get; }
         public Updateable<ChatComponent?> Display { get; }
-        public TablistEntry(Guid id, string name, Collection<Property> properties)
+        public TablistEntry(Guid id, string name, ReadOnlyCollection<Property>? properties = null)
         {
             Id = id;
             Name = name;
-            Properties = properties;
+            Properties = properties ?? new List<Property>().AsReadOnly();
             Gamemode = new(Structs.Gamemode.Survival, Lock);
             Latency = new(-1, Lock);
             Display = new(null, Lock);

@@ -1,38 +1,56 @@
-﻿using System.Diagnostics.Contracts;
+﻿using System;
 using System.Drawing;
-using System.Text.RegularExpressions;
 
 namespace Net.Myzuc.Illumination.Content.World
 {
     public sealed class BiomeType
     {
-        public string Name { get; }
-        public bool Precipitation { get; }
-        public Color SkyColor { get; }
-        public Color WaterFogColor { get; }
-        public Color FogColor { get; }
-        public Color WaterColor { get; }
-        public Color? FoliageColor { get; }
-        public Color? GrassColor { get; }
-        public (bool, string, int, int)? Music { get; }
-        public string? AmbientSound { get; }
-        public (string, double)? AdditionsSound { get; }
-        public (string, int, double, int)? MoodSound { get; }
-        public BiomeType(string name, bool precipitation, Color skyColor, Color waterFogColor, Color fogColor, Color waterColor, Color? foliageColor, Color? grassColor, (bool, string, int, int)? music, string? ambientSound, (string, double)? additionsSound, (string, int, double, int)? moodSound)
+        public readonly struct BiomeMusic
         {
-            Contract.Requires(Regex.IsMatch(name, "[A-z:._-]"));
+            public readonly string Sound { get; }
+            public readonly bool ReplaceCurrentMusic { get; init; } = true;
+            public readonly TimeSpan MaxDelay { get; init; } = TimeSpan.Zero;
+            public readonly TimeSpan MinDelay { get; init; } = TimeSpan.Zero;
+            public BiomeMusic(string sound)
+            {
+                Sound = sound;
+            }
+        }
+        public readonly struct BiomeRandomSound//TODO: does this actually work?
+        {
+            public readonly string Sound { get; }
+            public readonly double Chance { get; init; } = 1.0d / 60.0d;
+            public BiomeRandomSound(string sound)
+            {
+                Sound = sound;
+            }
+        }
+        public readonly struct BiomeIntervalSound //TODO: does this actually work?
+        {
+            public readonly string Sound { get; }
+            public readonly TimeSpan Delay { get; init; } = TimeSpan.FromSeconds(10);
+            public readonly double Offset { get; init; } = 0.0d;
+            public readonly int BlockSearchExtent { get; init; } = 0;
+            public BiomeIntervalSound(string sound)
+            {
+                Sound = sound;
+            }
+        }
+        public string Name { get; }
+        public bool Precipitation { get; init; } = true;
+        public Color SkyColor { get; init; } = Color.CornflowerBlue;
+        public Color WaterFogColor { get; init; } = Color.DarkBlue;
+        public Color FogColor { get; init; } = Color.WhiteSmoke;
+        public Color WaterColor { get; init; } = Color.Blue;
+        public Color? FoliageColor { get; init; } = Color.LimeGreen;
+        public Color? GrassColor { get; init; } = Color.LimeGreen;
+        public BiomeMusic? Music { get; init; } = null;
+        public string? AmbientSound { get; init; } = null;
+        public BiomeRandomSound? AdditionsSound { get; init; } = null;
+        public BiomeIntervalSound? MoodSound { get; init; } = null;
+        public BiomeType(string name)
+        {
             Name = name;
-            Precipitation = precipitation;
-            SkyColor = skyColor;
-            WaterFogColor = waterFogColor;
-            FogColor = fogColor;
-            WaterColor = waterColor;
-            FoliageColor = foliageColor;
-            GrassColor = grassColor;
-            Music = music;
-            AmbientSound = ambientSound;
-            AdditionsSound = additionsSound;
-            MoodSound = moodSound;
         }
         //TODO: particle (float:probability,compound:properties+type:particle_type)
     }

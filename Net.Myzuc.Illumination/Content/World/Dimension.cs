@@ -135,7 +135,12 @@ namespace Net.Myzuc.Illumination.Content.World
                 mso.WriteF64(1.0);
                 mso.WriteU8(8);
                 mso.WriteString16("effects");
-                mso.WriteString16(Type.Effects);
+                mso.WriteString16(
+                    Type.Effects == DimensionType.VanillaDimension.Overworld ? "minecraft:overworld" :
+                    Type.Effects == DimensionType.VanillaDimension.Nether ? "minecraft:the_nether" :
+                    Type.Effects == DimensionType.VanillaDimension.End ? "minecraft:the_end" :
+                    "minecraft:overworld"
+                    );
                 mso.WriteU8(1);
                 mso.WriteString16("has_ceiling");
                 mso.WriteBool(false);
@@ -257,16 +262,16 @@ namespace Net.Myzuc.Illumination.Content.World
                         mso.WriteString16("music");
                         mso.WriteU8(1);
                         mso.WriteString16("replace_current_music");
-                        mso.WriteBool(biome.Music.Value.Item1);
+                        mso.WriteBool(biome.Music.Value.ReplaceCurrentMusic);
                         mso.WriteU8(8);
                         mso.WriteString16("sound");
-                        mso.WriteString16(biome.Music.Value.Item2);
+                        mso.WriteString16(biome.Music.Value.Sound);
                         mso.WriteU8(3);
                         mso.WriteString16("max_delay");
-                        mso.WriteS32(biome.Music.Value.Item3);
+                        mso.WriteS32((int)(biome.Music.Value.MaxDelay.TotalSeconds * 20.0d));
                         mso.WriteU8(3);
                         mso.WriteString16("min_delay");
-                        mso.WriteS32(biome.Music.Value.Item4);
+                        mso.WriteS32((int)(biome.Music.Value.MinDelay.TotalSeconds * 20.0d));
                         mso.WriteU8(0);
                     }
                     if (biome.AmbientSound is not null)
@@ -281,10 +286,10 @@ namespace Net.Myzuc.Illumination.Content.World
                         mso.WriteString16("additions_sound");
                         mso.WriteU8(8);
                         mso.WriteString16("sound");
-                        mso.WriteString16(biome.AdditionsSound.Value.Item1);
+                        mso.WriteString16(biome.AdditionsSound.Value.Sound);
                         mso.WriteU8(6);
                         mso.WriteString16("tick_chance");
-                        mso.WriteF64(biome.AdditionsSound.Value.Item2);
+                        mso.WriteF64(biome.AdditionsSound.Value.Chance / 20.0d);
                         mso.WriteU8(0);
                     }
                     if (biome.MoodSound.HasValue)
@@ -293,16 +298,16 @@ namespace Net.Myzuc.Illumination.Content.World
                         mso.WriteString16("additions_sound");
                         mso.WriteU8(8);
                         mso.WriteString16("sound");
-                        mso.WriteString16(biome.MoodSound.Value.Item1);
+                        mso.WriteString16(biome.MoodSound.Value.Sound);
                         mso.WriteU8(3);
                         mso.WriteString16("tick_delay");
-                        mso.WriteS32(biome.MoodSound.Value.Item2);
+                        mso.WriteS32((int)(biome.MoodSound.Value.Delay.TotalSeconds * 20.0d));
                         mso.WriteU8(6);
                         mso.WriteString16("offset");
-                        mso.WriteF64(biome.MoodSound.Value.Item3);
+                        mso.WriteF64(biome.MoodSound.Value.Offset);
                         mso.WriteU8(3);
                         mso.WriteString16("block_search_extent");
-                        mso.WriteS32(biome.MoodSound.Value.Item4);
+                        mso.WriteS32(biome.MoodSound.Value.BlockSearchExtent);
                         mso.WriteU8(0);
                     }
                     //TODO: particle
