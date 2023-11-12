@@ -5,6 +5,36 @@ namespace Net.Myzuc.Illumination.Chat
 {
     public abstract class ChatComponent
     {
+        public sealed class ClickEvent
+        {
+            [JsonProperty("open_url")]
+            public string? OpenUrl { get; set; }
+            [JsonProperty("run_command")]
+            public string? RunCommand { get; set; }
+            [JsonProperty("suggest_command")]
+            public string? SuggestCommand { get; set; }
+            [JsonProperty("change_page")]
+            public int? ChangePage { get; set; }
+            [JsonProperty("copy_to_clipboard")]
+            public string? CopyToClipboard { get; set; }
+            public ClickEvent()
+            {
+
+            }
+        }
+        public sealed class HoverEvent
+        {
+            [JsonProperty("show_text")]
+            public ChatComponent? ShowText { get; set; }
+            [JsonProperty("show_item")]
+            public ItemPreview? ShowItem { get; set; }
+            [JsonProperty("show_entity")]
+            public string? ShowEntity { get; set; }
+            public HoverEvent()
+            {
+
+            }
+        }
         [JsonProperty("bold")]
         public bool? Bold { get; set; }
         [JsonProperty("italic")]
