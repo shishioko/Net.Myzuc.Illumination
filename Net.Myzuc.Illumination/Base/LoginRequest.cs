@@ -1,6 +1,5 @@
 ﻿using Net.Myzuc.Illumination.Net;
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -11,37 +10,30 @@ using System.Security.Cryptography;
 using System.Text;
 using Newtonsoft.Json;
 using System.Text.Json;
-using Microsoft.VisualStudio.Threading;
 using System.Threading;
 using Net.Myzuc.Illumination.Chat;
-using Net.Myzuc.Illumination.Base;
+using System.Collections.ObjectModel;
+using Net.Myzuc.Illumination.Util;
 
-namespace Net.Myzuc.Illumination
+namespace Net.Myzuc.Illumination.Base
 {
     public sealed class LoginRequest
     {
-        public event Func<bool> Encryption;
-        public event Func<int> Compression;
-        public event Action<JsonElement> Failure;
-        public event Action<Client> Success;
+        public event Func<bool> Encryption = () => false;
+        public event Func<int> Compression = () => 256;
+        public event Action<JsonElement> Failure = (_) => { };
+        public event Func<(Guid id, string name, ReadOnlyCollection<Property> properties)> PreSuccess;
+        public event Action<Client> PostSuccess = (_) => { };
         public Connection Connection { get; }
-        public string Name { get; private set; }
-        public Guid Id { get; private set; }
-        public bool Encrypted { get; private set; }
-        public ConcurrentDictionary<string, string> Properties { get; }
-        private bool Done;
+        public string Name { get; private set; } = string.Empty;
+        public Guid Id { get; private set; } = Guid.Empty;
+        public bool Encrypted { get; private set; } = false;
+        public ReadOnlyCollection<Property> Properties { get; private set; } = new List<Property>().AsReadOnly();
+        private bool Done = false;
         internal LoginRequest(Connection connection)
         {
-            Encryption = () => false;
-            Compression = () => 256;
-            Failure = (_) => { };
-            Success = (_) => { };
+            PreSuccess = () => (Id, Name, Properties);
             Connection = connection;
-            Name = string.Empty;
-            Id = Guid.Empty;
-            Encrypted = false;
-            Properties = new();
-            Done = false;
         }
         public void Disconnect(ChatComponent chat)
         {
@@ -98,10 +90,12 @@ namespace Net.Myzuc.Illumination
                 }
                 Name = auth.RootElement.GetProperty("name").GetString()!;
                 Id = Guid.ParseExact(auth.RootElement.GetProperty("id").GetString()!, "N");
-                foreach(JsonElement property in auth.RootElement.GetProperty("properties")!.EnumerateArray())
+                List<Property> properties = new();
+                foreach (JsonElement property in auth.RootElement.GetProperty("properties")!.EnumerateArray())
                 {
-                    Properties.TryAdd(property.GetProperty("name").GetString()!, property.GetProperty("value").GetString()!);
+                    properties.Add(new(property.GetProperty("name").GetString()!, property.GetProperty("value").GetString()!, property.GetProperty("signature").GetString()));
                 }
+                Properties = properties.AsReadOnly();
             }
             else
             {
@@ -126,18 +120,18 @@ namespace Net.Myzuc.Illumination
                 mso.WriteGuid(Id);
                 mso.WriteString32V(Name);
                 mso.WriteS32V(Properties.Count);
-                foreach (KeyValuePair<string, string> property in Properties)
+                foreach (Property property in Properties)
                 {
-                    mso.WriteString32V(property.Key);
+                    mso.WriteString32V(property.Name);
                     mso.WriteString32V(property.Value);
-                    mso.WriteBool(false);
+                    mso.WriteString32VN(property.Signature);
                 }
                 Connection.Send(mso.Get());
             }
             Done = true;
             Client client = new(this);
             ThreadPool.QueueUserWorkItem(client.KeepAlive);
-            Success.Invoke(client);
+            PostSuccess.Invoke(client);
             client.ProcessIncomingPackets();
         }
     }

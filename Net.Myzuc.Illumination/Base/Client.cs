@@ -10,13 +10,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 
-namespace Net.Myzuc.Illumination
+namespace Net.Myzuc.Illumination.Base
 {
     public sealed class Client : IDisposable, IIdentifiable
     {
-        public Guid Id => Login.Id;
         public event Action Disposed;
-        public LoginRequest Login { get; }
+        public Guid Id { get; }
+        public string Name { get; }
         public DateTime LastKeepAlive { get; private set; }
         public bool Hardcore { get; set; }
         public byte Gamemode { get; set; } //TODO: updateable
@@ -33,7 +33,8 @@ namespace Net.Myzuc.Illumination
         internal Client(LoginRequest login)
         {
             Disposed = () => { };
-            Login = login;
+            Id = login.Id;
+            Name = login.Name;
             LastKeepAlive = DateTime.Now;
             SubscribedEntities = new();
             SubscribedEntityIds = new();
@@ -41,7 +42,7 @@ namespace Net.Myzuc.Illumination
             Bossbars = new();
             PacketQueue = new();
             PacketSemaphore = new(1, 1);
-            Login.Connection.Disposed += Dispose;
+            login.Connection.Disposed += Dispose;
         }
         public void Message(ChatComponent chat, bool overlay = false)
         {
@@ -67,7 +68,7 @@ namespace Net.Myzuc.Illumination
             while (!SubscribedEntities.IsEmpty)
             {
                 Entity entity = SubscribedEntities.First().Key;
-                entity.Subscribers.TryRemove(Login.Id, out _);
+                entity.Subscribers.TryRemove(Id, out _);
                 SubscribedEntities.TryRemove(entity, out int eid);
                 SubscribedEntityIds.TryRemove(eid, out _);
             }
@@ -137,7 +138,7 @@ namespace Net.Myzuc.Illumination
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Login.Connection.Throw(ex);
             }
@@ -152,7 +153,7 @@ namespace Net.Myzuc.Illumination
                 }
                 PacketSemaphore.Release();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Login.Connection.Throw(ex);
             }

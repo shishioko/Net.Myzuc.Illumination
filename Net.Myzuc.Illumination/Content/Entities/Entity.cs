@@ -81,7 +81,7 @@ namespace Net.Myzuc.Illumination.Content.Entities
         }
         public void Subscribe(Client client)
         {
-            if (!Subscribers.TryAdd(client.Login.Id, client)) return;
+            if (!Subscribers.TryAdd(client.Id, client)) return;
             int eid = 0;
             while (client.SubscribedEntityIds.ContainsKey(eid))
             {
@@ -109,7 +109,7 @@ namespace Net.Myzuc.Illumination.Content.Entities
         }
         public void Unsubscribe(Client client)
         {
-            if (!Subscribers.TryRemove(client.Login.Id, out _)) return;
+            if (!Subscribers.TryRemove(client.Id, out _)) return;
             if (client.SubscribedEntities.TryRemove(this, out int eid))
             {
                 client.SubscribedEntityIds.TryRemove(eid, out _);

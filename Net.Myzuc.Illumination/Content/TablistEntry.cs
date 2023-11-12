@@ -12,18 +12,6 @@ namespace Net.Myzuc.Illumination.Content
 {
     public sealed class TablistEntry : Subscribeable<Tablist>, IUpdateable, IIdentifiable
     {
-        public readonly struct Property
-        {
-            public readonly string Name;
-            public readonly string Value;
-            public readonly string? Signature;
-            public Property(string name, string value, string? signature)
-            {
-                Name = name;
-                Value = value;
-                Signature = signature;
-            }
-        }
         public object Lock { get; } = new();
         public Guid Id { get; }
         public string Name { get; }

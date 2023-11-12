@@ -29,3 +29,5 @@ item preview and entity preview for chat: fix
 tablist keep track publicly of entries
 
 biome particles, dont forget to add to dimension packet login
+
+move declarations for initial valeus up in file

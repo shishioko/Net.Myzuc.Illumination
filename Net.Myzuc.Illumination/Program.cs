@@ -73,7 +73,7 @@ namespace Net.Myzuc.Illumination
                         auth.Disconnect(new ChatText("Authentication failure!"));
                         return;
                     };
-                    auth.Success += (Client client) =>
+                    auth.PostSuccess += (Client client) =>
                     {
                         Console.WriteLine($"[{endpoint}] [{connection.Endpoint}] Logged in.");
                         List<BiomeType> biomes = new() 
