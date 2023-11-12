@@ -1,33 +1,12 @@
 ﻿entities
 particles
 
-redesign for thread safety
-forget client login class and transfer id and stuff
-add plains biome to biome codec by default
-
-add tick methods to classes to combine larger packet changes?
-
-add names to properties inside (a, b, c) inside classes like biometypes
-
-add enums to things like bossbar
-
-add iupdateable
-
-merge tablistentry into tablist
-
-"added a standardized object subscription interface, implemented update bundling model, added some enums "
-
-replace dimensiontype effects and stuff with enum
 recheck limitation checks 
 nan border
-readonly getters
 make chunks obey updates too
 move to assigning stuff instead of subscribing
-cache stringified chat and stuff objects
 
 item preview and entity preview for chat: fix
 tablist keep track publicly of entries
 
 biome particles, dont forget to add to dimension packet login
-
-move declarations for initial valeus up in file
