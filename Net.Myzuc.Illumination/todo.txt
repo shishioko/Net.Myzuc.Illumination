@@ -7,3 +7,5 @@ item preview and entity preview for chat: fix
 tablist keep track publicly of entries
 
 biome particles, dont forget to add to dimension packet login
+
+replace count >0 with .Any

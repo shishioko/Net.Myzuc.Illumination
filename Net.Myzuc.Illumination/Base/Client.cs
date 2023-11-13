@@ -25,8 +25,7 @@ namespace Net.Myzuc.Illumination.Base
         public bool Hardcore { get; set; }
         public byte Gamemode { get; set; } //TODO: updateable
         public bool ReducedDebugInfo { get; set; }
-        internal readonly ConcurrentDictionary<Entity, int> SubscribedEntities;
-        internal readonly ConcurrentDictionary<int, Guid> SubscribedEntityIds;
+        internal readonly Dictionary<int, Entity> SubscribedEntities;
         internal Dictionary<(int x, int z), Chunk> Chunks { get; }
         internal Dictionary<Guid, Bossbar> Bossbars { get; }
         internal Dimension? Dimension { get; set; }
@@ -46,7 +45,6 @@ namespace Net.Myzuc.Illumination.Base
             Properties = login.Properties;
 
             SubscribedEntities = new();
-            SubscribedEntityIds = new();
             Chunks = new();
             Bossbars = new();
 
@@ -77,12 +75,13 @@ namespace Net.Myzuc.Illumination.Base
         {
             if (Connection.IsDisposed) return;
             Connection.Disposed -= Dispose;
-            while (!SubscribedEntities.IsEmpty)
+            lock (SubscribedEntities)
             {
-                Entity entity = SubscribedEntities.First().Key;
-                entity.Subscribers.TryRemove(Id, out _);
-                SubscribedEntities.TryRemove(entity, out int eid);
-                SubscribedEntityIds.TryRemove(eid, out _);
+                while (SubscribedEntities.Count > 0)
+                {
+                    KeyValuePair<int,Entity> kvp = SubscribedEntities.First();
+                    kvp.Value.UnsubscribeQuietly(this);
+                }
             }
             lock (Chunks)
             {
