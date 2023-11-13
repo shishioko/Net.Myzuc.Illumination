@@ -681,7 +681,7 @@ namespace Net.Myzuc.Illumination.Net
             {
                 byte current = ReadU8();
                 data <<= 7;
-                data |= current & 127l;
+                data |= current & 127L;
                 if ((current & 128) != 1) return data;
             }
         }
