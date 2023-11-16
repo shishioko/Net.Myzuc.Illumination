@@ -134,8 +134,7 @@ namespace Net.Myzuc.Illumination.Base
                 {
                     Span<byte> data = Connection.Receive();
                     ContentStream msi = new(data);
-                    int d = msi.ReadS32V();
-                    switch (d)
+                    switch (msi.ReadS32V())
                     {
                         default:
                             {

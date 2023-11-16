@@ -37,8 +37,9 @@
                 lock (Lock)
                 {
                     if (InternalPreUpdate is null) return InternalPostUpdate is not null;
-                    if (!InternalPreUpdate.Equals(InternalPostUpdate)) return true;
-                    return InternalPreUpdate.GetHashCode() == InternalPostUpdate.GetHashCode();
+                    if (!InternalPreUpdate.Equals(InternalPostUpdate) && typeof(T).IsByRef) return true;
+                    if (InternalPreUpdate is null) return true;
+                    return InternalPreUpdate.GetHashCode() != InternalPostUpdate.GetHashCode();
                 }
             }
         }

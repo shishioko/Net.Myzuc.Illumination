@@ -5,8 +5,6 @@ using Net.Myzuc.Illumination.Util;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Security.Cryptography;
 
 namespace Net.Myzuc.Illumination.Content.Entities
 {
@@ -185,7 +183,7 @@ namespace Net.Myzuc.Illumination.Content.Entities
                     Yaw.Update();
                     Pitch.Update();
                 }
-                if ((X.Updated || Y.Updated || Z.Updated) && (Pitch.Updated || Yaw.Updated || HeadYaw.Updated))
+                if ((X.Updated || Y.Updated || Z.Updated) && (Pitch.Updated || Yaw.Updated))
                 {
                     Iterate((Client client) =>
                     {
@@ -197,9 +195,9 @@ namespace Net.Myzuc.Illumination.Content.Entities
                         using ContentStream mso = new();
                         mso.WriteS32V(44);
                         mso.WriteS32V(eid);
-                        mso.WriteS32((ushort)((X.PostUpdate * 32.0d - X.PreUpdate * 32.0d) * 128.0d));
-                        mso.WriteS32((ushort)((Y.PostUpdate * 32.0d - Y.PreUpdate * 32.0d) * 128.0d));
-                        mso.WriteS32((ushort)((Z.PostUpdate * 32.0d - Z.PreUpdate * 32.0d) * 128.0d));
+                        mso.WriteS16((short)((X.PostUpdate * 32.0d - X.PreUpdate * 32.0d) * 128.0d));
+                        mso.WriteS16((short)((Y.PostUpdate * 32.0d - Y.PreUpdate * 32.0d) * 128.0d));
+                        mso.WriteS16((short)((Z.PostUpdate * 32.0d - Z.PreUpdate * 32.0d) * 128.0d));
                         mso.WriteU8((byte)(Yaw.PostUpdate / 360.0f * 256.0f));
                         mso.WriteU8((byte)(Pitch.PostUpdate / 360.0f * 256.0f));
                         mso.WriteBool(false);
@@ -223,9 +221,9 @@ namespace Net.Myzuc.Illumination.Content.Entities
                         using ContentStream mso = new();
                         mso.WriteS32V(43);
                         mso.WriteS32V(eid);
-                        mso.WriteS32((ushort)((X.PostUpdate * 32.0d - X.PreUpdate * 32.0d) * 128.0d));
-                        mso.WriteS32((ushort)((Y.PostUpdate * 32.0d - Y.PreUpdate * 32.0d) * 128.0d));
-                        mso.WriteS32((ushort)((Z.PostUpdate * 32.0d - Z.PreUpdate * 32.0d) * 128.0d));
+                        mso.WriteS16((short)((X.PostUpdate * 32.0d - X.PreUpdate * 32.0d) * 128.0d));
+                        mso.WriteS16((short)((Y.PostUpdate * 32.0d - Y.PreUpdate * 32.0d) * 128.0d));
+                        mso.WriteS16((short)((Z.PostUpdate * 32.0d - Z.PreUpdate * 32.0d) * 128.0d));
                         mso.WriteBool(false);
                         client.Send(mso.Get());
                     });
@@ -390,20 +388,21 @@ namespace Net.Myzuc.Illumination.Content.Entities
             {
                 if (Flags.Updated || !update)
                 {
+                    if (update) Flags.Update();
                     stream.WriteU8(0);
                     stream.WriteS32V(0);
                     stream.WriteU8(Flags.PostUpdate.Bitmask);
-                    if (update) Flags.Update();
                 }
                 if (Air.Updated || !update)
                 {
+                    if (update) Air.Update();
                     stream.WriteU8(1);
                     stream.WriteS32V(1);
                     stream.WriteS32V((int)(Air.PostUpdate.TotalSeconds * 20.0d));
-                    if (update) Air.Update();
                 }
                 if (Display.Updated || !update)
                 {
+                    if (update) Display.Update();
                     stream.WriteU8(2);
                     stream.WriteS32V(6);
                     stream.WriteBool(Display.PostUpdate is not null);
@@ -411,35 +410,34 @@ namespace Net.Myzuc.Illumination.Content.Entities
                     stream.WriteU8(3);
                     stream.WriteS32V(8);
                     stream.WriteBool(Display.PostUpdate is not null);
-                    if (update) Display.Update();
                 }
                 if (Silent.Updated || !update)
                 {
+                    if (update) Silent.Update();
                     stream.WriteU8(4);
                     stream.WriteS32V(8);
                     stream.WriteBool(Silent.PostUpdate);
-                    if (update) Silent.Update();
                 }
                 if (NoGravity.Updated || !update)
                 {
+                    if (update) NoGravity.Update();
                     stream.WriteU8(5);
                     stream.WriteS32V(8);
                     stream.WriteBool(NoGravity.PostUpdate);
-                    if (update) NoGravity.Update();
                 }
                 if (Pose.Updated || !update)
                 {
+                    if (update) Pose.Update();
                     stream.WriteU8(6);
                     stream.WriteS32V(20);
                     stream.WriteS32V((int)Pose.PostUpdate);
-                    if (update) Pose.Update();
                 }
                 if (Frozen.Updated || !update)
                 {
+                    if (update) Frozen.Update();
                     stream.WriteU8(7);
                     stream.WriteS32V(1);
                     stream.WriteS32V((int)(Frozen.PostUpdate.TotalSeconds * 20.0d));
-                    if (update) Frozen.Update();
                 }
             }
         }

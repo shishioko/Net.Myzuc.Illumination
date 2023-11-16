@@ -36,7 +36,7 @@ namespace Net.Myzuc.Illumination.Content
             {
                 if (!Gamemode.Updated && !Latency.Updated && !Display.Updated) return;
                 using ContentStream mso = new();
-                mso.WriteS32V(58);
+                mso.WriteS32V(63);
                 mso.WriteU8((byte)((Gamemode.Updated ? 4 : 0) | (Visible.Updated ? 8 : 0) | (Latency.Updated ? 16 : 0) | (Display.Updated ? 32 : 0)));
                 mso.WriteS32V(1);
                 mso.WriteGuid(Id);
@@ -97,7 +97,7 @@ namespace Net.Myzuc.Illumination.Content
                     mso.WriteString32VN(property.Signature);
                 }
                 mso.WriteS32V((int)Gamemode.PreUpdate);
-                mso.WriteBool(true);
+                mso.WriteBool(Visible.PreUpdate);
                 mso.WriteS32V(Latency.PreUpdate);
                 mso.WriteBool(Display.PreUpdate is not null);
                 if (Display.PreUpdate is not null)

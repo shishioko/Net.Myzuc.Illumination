@@ -114,6 +114,7 @@ namespace Net.Myzuc.Illumination.Base
                 Connection.Send(mso.Get());
             }
             Connection.CompressionThreshold = compression;
+            (Id, Name, Properties) = PreSuccess();
             using (ContentStream mso = new())
             {
                 mso.WriteS32V(2);

@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Net;
 using System.Text.Json;
+using System.Threading;
 using static Net.Myzuc.Illumination.Status.ServerStatus;
 
 namespace Net.Myzuc.Illumination
@@ -74,10 +75,17 @@ namespace Net.Myzuc.Illumination
                         auth.Disconnect(new ChatText("Authentication failure!"));
                         return;
                     };
+                    auth.PreSuccess += () =>
+                    {
+                        return (Guid.NewGuid(), auth.Name, new List<Property>()
+                        {
+                            new("textures", "ewogICJ0aW1lc3RhbXAiIDogMTY1MzIwMTM1OTk5MCwKICAicHJvZmlsZUlkIiA6ICJiMjdjMjlkZWZiNWU0OTEyYjFlYmQ5NDVkMmI2NzE0YSIsCiAgInByb2ZpbGVOYW1lIiA6ICJIRUtUMCIsCiAgInNpZ25hdHVyZVJlcXVpcmVkIiA6IHRydWUsCiAgInRleHR1cmVzIiA6IHsKICAgICJTS0lOIiA6IHsKICAgICAgInVybCIgOiAiaHR0cDovL3RleHR1cmVzLm1pbmVjcmFmdC5uZXQvdGV4dHVyZS82ZDE4NGJkYTRkZDllYWEwOWZmMDMxYzU5ZTkzZTIzN2ZhY2E0MjQzODUxMDYwMTliYjNhMzMxOGZmNTk4ODlmIiwKICAgICAgIm1ldGFkYXRhIiA6IHsKICAgICAgICAibW9kZWwiIDogInNsaW0iCiAgICAgIH0KICAgIH0KICB9Cn0=", "s1r8R8zvhqcgQ+iWl83oSn3ewxlPYIL8z09Z9oqhFVSNeMyq0GZc9NuHWtgrvjRPnxMUkEe4H5yyXACNg+L9S9lyPFcOh8Zl9E8mjD2NscXgTFj/mbO1N+gtgS/b+sLrVebPih72x/rnjoVqOLdJNbAWxQLZH5slo1vbiU9Njx3BZSJBQhKvOoBFfvzg+FXjEfTNiJkWU7yAeecPJN5mj4gsVYCyDGK5IWN81apeGTNfAJheEWFonuvmOnivbVqCQex1CREWIrAFwN+xSgM7Pu0r8DecdGtHihftOz3A/7bFfnoNIGvVuV14U70Hfw8x2UlAOxOlVK2pX6HpxL4b4cq7BZ6ja16pJtwOplfFunQAEGAA11idITtdsN+Q1y2EDKTGtF1n33TacXeJSqGoUDV8MYblDg53HfdvFbI02rnIZpy6A7Wmn9ithUO4D8Bu9EHOs54ei9mANxkfjU0RJ12f/aEhzz+kRCxU6qLBTL7LFaauJbkoAvReCK+F0xZh6TTo39EZfwScWlhzutV3pBvEYXKinJ3t8r9eLbmY7lW169ppT9t9y2IjFlVMrtrVEztXq9NW9DozkHKOxn4rNVmUrPLBH1m0BWo6xheiR+lKIqQSBX7rmDNQeLn8kvMfODWJFhEMksICPU7I7u3wWirxJHVu50oW6v440tfYYEM=")
+                        }.AsReadOnly());
+                    };
                     auth.PostSuccess += (Client client) =>
                     {
                         Console.WriteLine($"[{endpoint}] [{connection.Endpoint}] Logged in.");
-                        List<BiomeType> biomes = new() 
+                        List<BiomeType> biomes = new()
                         {
                             new("minecraft:plains")
                             {
@@ -138,16 +146,28 @@ namespace Net.Myzuc.Illumination
                         player.X.PostUpdate = 0;
                         player.Y.PostUpdate = 66;
                         player.Z.PostUpdate = 0;
-                        //player.Display.PostUpdate = new ChatText("gay");
-                        player.Pose.PostUpdate = Entity.EntityPose.Swimming;
-                        TablistEntry tabplayer = new(player.Id, "gay");
+                        player.Pose.PostUpdate = Entity.EntityPose.Sleeping;
+                        //player.Display.PostUpdate = new ChatText("gay 2");
+                        TablistEntry tabplayer = new(player.Id, "gay", new List<Property>()
+                        {
+                            new("textures", "ewogICJ0aW1lc3RhbXAiIDogMTY1MzIwMTM1OTk5MCwKICAicHJvZmlsZUlkIiA6ICJiMjdjMjlkZWZiNWU0OTEyYjFlYmQ5NDVkMmI2NzE0YSIsCiAgInByb2ZpbGVOYW1lIiA6ICJIRUtUMCIsCiAgInNpZ25hdHVyZVJlcXVpcmVkIiA6IHRydWUsCiAgInRleHR1cmVzIiA6IHsKICAgICJTS0lOIiA6IHsKICAgICAgInVybCIgOiAiaHR0cDovL3RleHR1cmVzLm1pbmVjcmFmdC5uZXQvdGV4dHVyZS82ZDE4NGJkYTRkZDllYWEwOWZmMDMxYzU5ZTkzZTIzN2ZhY2E0MjQzODUxMDYwMTliYjNhMzMxOGZmNTk4ODlmIiwKICAgICAgIm1ldGFkYXRhIiA6IHsKICAgICAgICAibW9kZWwiIDogInNsaW0iCiAgICAgIH0KICAgIH0KICB9Cn0=", "s1r8R8zvhqcgQ+iWl83oSn3ewxlPYIL8z09Z9oqhFVSNeMyq0GZc9NuHWtgrvjRPnxMUkEe4H5yyXACNg+L9S9lyPFcOh8Zl9E8mjD2NscXgTFj/mbO1N+gtgS/b+sLrVebPih72x/rnjoVqOLdJNbAWxQLZH5slo1vbiU9Njx3BZSJBQhKvOoBFfvzg+FXjEfTNiJkWU7yAeecPJN5mj4gsVYCyDGK5IWN81apeGTNfAJheEWFonuvmOnivbVqCQex1CREWIrAFwN+xSgM7Pu0r8DecdGtHihftOz3A/7bFfnoNIGvVuV14U70Hfw8x2UlAOxOlVK2pX6HpxL4b4cq7BZ6ja16pJtwOplfFunQAEGAA11idITtdsN+Q1y2EDKTGtF1n33TacXeJSqGoUDV8MYblDg53HfdvFbI02rnIZpy6A7Wmn9ithUO4D8Bu9EHOs54ei9mANxkfjU0RJ12f/aEhzz+kRCxU6qLBTL7LFaauJbkoAvReCK+F0xZh6TTo39EZfwScWlhzutV3pBvEYXKinJ3t8r9eLbmY7lW169ppT9t9y2IjFlVMrtrVEztXq9NW9DozkHKOxn4rNVmUrPLBH1m0BWo6xheiR+lKIqQSBX7rmDNQeLn8kvMfODWJFhEMksICPU7I7u3wWirxJHVu50oW6v440tfYYEM=")
+                        }.AsReadOnly());
+                        tabplayer.Visible.PostUpdate = true;
                         tabplayer.Gamemode.PostUpdate = Gamemode.Creative;
-                        //tabplayer.Display.PostUpdate = new ChatText("gay");
+                        //tabplayer.Display.PostUpdate = new ChatText("gay 1");
                         tabplayer.Latency.PostUpdate = 500;
                         tabplayer.Update();
                         tabplayer.Subscribe(tab);
                         player.Update();
                         player.Subscribe(client);
+
+                        TablistEntry playertab = new(client.Id, "<client>", new List<Property>()
+                        {
+                            new("textures", "ewogICJ0aW1lc3RhbXAiIDogMTY1MzIwMTM1OTk5MCwKICAicHJvZmlsZUlkIiA6ICJiMjdjMjlkZWZiNWU0OTEyYjFlYmQ5NDVkMmI2NzE0YSIsCiAgInByb2ZpbGVOYW1lIiA6ICJIRUtUMCIsCiAgInNpZ25hdHVyZVJlcXVpcmVkIiA6IHRydWUsCiAgInRleHR1cmVzIiA6IHsKICAgICJTS0lOIiA6IHsKICAgICAgInVybCIgOiAiaHR0cDovL3RleHR1cmVzLm1pbmVjcmFmdC5uZXQvdGV4dHVyZS82ZDE4NGJkYTRkZDllYWEwOWZmMDMxYzU5ZTkzZTIzN2ZhY2E0MjQzODUxMDYwMTliYjNhMzMxOGZmNTk4ODlmIiwKICAgICAgIm1ldGFkYXRhIiA6IHsKICAgICAgICAibW9kZWwiIDogInNsaW0iCiAgICAgIH0KICAgIH0KICB9Cn0=", "s1r8R8zvhqcgQ+iWl83oSn3ewxlPYIL8z09Z9oqhFVSNeMyq0GZc9NuHWtgrvjRPnxMUkEe4H5yyXACNg+L9S9lyPFcOh8Zl9E8mjD2NscXgTFj/mbO1N+gtgS/b+sLrVebPih72x/rnjoVqOLdJNbAWxQLZH5slo1vbiU9Njx3BZSJBQhKvOoBFfvzg+FXjEfTNiJkWU7yAeecPJN5mj4gsVYCyDGK5IWN81apeGTNfAJheEWFonuvmOnivbVqCQex1CREWIrAFwN+xSgM7Pu0r8DecdGtHihftOz3A/7bFfnoNIGvVuV14U70Hfw8x2UlAOxOlVK2pX6HpxL4b4cq7BZ6ja16pJtwOplfFunQAEGAA11idITtdsN+Q1y2EDKTGtF1n33TacXeJSqGoUDV8MYblDg53HfdvFbI02rnIZpy6A7Wmn9ithUO4D8Bu9EHOs54ei9mANxkfjU0RJ12f/aEhzz+kRCxU6qLBTL7LFaauJbkoAvReCK+F0xZh6TTo39EZfwScWlhzutV3pBvEYXKinJ3t8r9eLbmY7lW169ppT9t9y2IjFlVMrtrVEztXq9NW9DozkHKOxn4rNVmUrPLBH1m0BWo6xheiR+lKIqQSBX7rmDNQeLn8kvMfODWJFhEMksICPU7I7u3wWirxJHVu50oW6v440tfYYEM=")
+                        }.AsReadOnly());
+                        playertab.Visible.PostUpdate = true;
+                        playertab.Update();
+                        playertab.Subscribe(tab);
 
                         client.Message(new ChatText("System Test Message"));
 
@@ -162,6 +182,20 @@ namespace Net.Myzuc.Illumination
                         border.TargetDiameter.PostUpdate = 5;
                         border.TargetTime.PostUpdate = TimeSpan.FromSeconds(30);
                         border.Update();
+                        Thread.Sleep(2000);
+                        ThreadPool.QueueUserWorkItem((object? _) =>
+                        {
+                            while (true)
+                            {
+                                for (double i = 0.0; i < Math.PI * 2; i += 0.2)
+                                {
+                                    player.X.PostUpdate = Math.Sin(i) * 2.0;
+                                    player.Z.PostUpdate = Math.Cos(i) * 2.0;
+                                    player.Update();
+                                    Thread.Sleep(100);
+                                }
+                            }
+                        });
                     };
                     connection.Disposed += () =>
                     {

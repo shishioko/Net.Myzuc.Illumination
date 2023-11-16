@@ -1,9 +1,7 @@
 ﻿using Net.Myzuc.Illumination.Base;
-using Net.Myzuc.Illumination.Content.Entities.Structs;
 using Net.Myzuc.Illumination.Net;
 using Net.Myzuc.Illumination.Util;
 using System;
-using System.Security.Cryptography;
 
 namespace Net.Myzuc.Illumination.Content.Entities
 {
@@ -89,9 +87,9 @@ namespace Net.Myzuc.Illumination.Content.Entities
                     Bitmask = (byte)((Bitmask & 191) | (value ? 64 : 0));
                 }
             }
-            public PlayerFlags()
+            public PlayerFlags(bool disable = false)
             {
-
+                if (!disable) Bitmask = 127;
             }
         }
         public override double HitboxWidth => 0.6;
@@ -150,31 +148,31 @@ namespace Net.Myzuc.Illumination.Content.Entities
                 base.Serialize(stream, update);
                 if (Absorption.Updated || !update)
                 {
+                    if (update) Absorption.Update();
                     stream.WriteU8(15);
                     stream.WriteS32V(3);
                     stream.WriteF32(Absorption.PostUpdate);
-                    if (update) Absorption.Update();
                 }
                 if (Score.Updated || !update)
                 {
+                    if (update) Score.Update();
                     stream.WriteU8(16);
                     stream.WriteS32V(1);
                     stream.WriteS32V(Score.PostUpdate);
-                    if (update) Score.Update();
                 }
                 if (SkinFlags.Updated || !update)
                 {
+                    if (update) SkinFlags.Update();
                     stream.WriteU8(17);
                     stream.WriteS32V(0);
                     stream.WriteU8(SkinFlags.PostUpdate.Bitmask);
-                    if (update) SkinFlags.Update();
                 }
                 if (RightHanded.Updated || !update)
                 {
+                    if (update) RightHanded.Update();
                     stream.WriteU8(18);
                     stream.WriteS32V(0);
                     stream.WriteBool(RightHanded.PostUpdate);
-                    if (update) RightHanded.Update();
                 }
             }
         }

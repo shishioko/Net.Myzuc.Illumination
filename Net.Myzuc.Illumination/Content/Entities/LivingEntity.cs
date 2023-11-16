@@ -1,10 +1,8 @@
-﻿using Net.Myzuc.Illumination.Base;
-using Net.Myzuc.Illumination.Content.Structs;
+﻿using Net.Myzuc.Illumination.Content.Structs;
 using Net.Myzuc.Illumination.Net;
 using Net.Myzuc.Illumination.Util;
 using System;
 using System.Drawing;
-using System.Security.Cryptography;
 
 namespace Net.Myzuc.Illumination.Content.Entities
 {
@@ -76,53 +74,53 @@ namespace Net.Myzuc.Illumination.Content.Entities
                 base.Serialize(stream, update);
                 if (HandFlags.Updated || !update)
                 {
+                    if (update) HandFlags.Update();
                     stream.WriteU8(8);
                     stream.WriteS32V(0);
                     stream.WriteU8(HandFlags.PostUpdate.Bitmask);
-                    if (update) HandFlags.Update();
                 }
                 if (Health.Updated || !update)
                 {
+                    if (update) Health.Update();
                     stream.WriteU8(9);
                     stream.WriteS32V(3);
                     stream.WriteF32(Health.PostUpdate);
-                    if (update) Health.Update();
                 }
                 if (PotionEffectColor.Updated || !update)
                 {
+                    if (update) PotionEffectColor.Update();
                     stream.WriteU8(10);
                     stream.WriteS32V(1);
                     stream.WriteS32V(PotionEffectColor.PostUpdate.ToArgb());
-                    if (update) PotionEffectColor.Update();
                 }
                 if (PotionEffectAmbient.Updated || !update)
                 {
+                    if (update) PotionEffectAmbient.Update();
                     stream.WriteU8(11);
                     stream.WriteS32V(8);
                     stream.WriteBool(PotionEffectAmbient.PostUpdate);
-                    if (update) PotionEffectAmbient.Update();
                 }
                 if (ArrowCount.Updated || !update)
                 {
+                    if (update) ArrowCount.Update();
                     stream.WriteU8(12);
                     stream.WriteS32V(1);
                     stream.WriteS32V(ArrowCount.PostUpdate);
-                    if (update) ArrowCount.Update();
                 }
                 if (StingCount.Updated || !update)
                 {
+                    if (update) StingCount.Update();
                     stream.WriteU8(13);
                     stream.WriteS32V(1);
                     stream.WriteS32V(StingCount.PostUpdate);
-                    if (update) StingCount.Update();
                 }
                 if (SleepingAt.Updated || !update)
                 {
+                    if (update) SleepingAt.Update();
                     stream.WriteU8(14);
                     stream.WriteS32V(11);
                     stream.WriteBool(SleepingAt.PostUpdate.HasValue);
                     if (SleepingAt.PostUpdate.HasValue) stream.WriteU64(SleepingAt.PostUpdate.Value.Value);
-                    if (update) SleepingAt.Update();
                 }
             }
         }
