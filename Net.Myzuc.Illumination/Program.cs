@@ -1,6 +1,7 @@
 ﻿using Net.Myzuc.Illumination.Base;
 using Net.Myzuc.Illumination.Chat;
 using Net.Myzuc.Illumination.Content;
+using Net.Myzuc.Illumination.Content.Entities;
 using Net.Myzuc.Illumination.Content.Structs;
 using System;
 using System.Collections.Generic;
@@ -15,7 +16,7 @@ namespace Net.Myzuc.Illumination
     {
         static void Main(string[] args)
         {
-            IPEndPoint endpoint = new IPEndPoint(IPAddress.Any, 62913);
+            IPEndPoint endpoint = new IPEndPoint(IPAddress.Any, 4646);
             Listener listener = new(endpoint);
             listener.Accept += (Connection connection) =>
             {
@@ -133,17 +134,21 @@ namespace Net.Myzuc.Illumination
                                 chunk.Subscribe(client);
                             }
                         }
-                        foreach (Chunk chunk in chunks)
-                        {
-                            for (int x = 0; x < 16; x++)
-                            {
-                                for (int z = 0; z < 16; z++)
-                                {
-                                    chunk[3].Blocks[x, 15, z] = 2;
-                                }
-                            }
-                            chunk.Update();
-                        }
+                        Player player = new(Guid.NewGuid());
+                        player.X.PostUpdate = 0;
+                        player.Y.PostUpdate = 66;
+                        player.Z.PostUpdate = 0;
+                        //player.Display.PostUpdate = new ChatText("gay");
+                        player.Pose.PostUpdate = Entity.EntityPose.Swimming;
+                        TablistEntry tabplayer = new(player.Id, "gay");
+                        tabplayer.Gamemode.PostUpdate = Gamemode.Creative;
+                        //tabplayer.Display.PostUpdate = new ChatText("gay");
+                        tabplayer.Latency.PostUpdate = 500;
+                        tabplayer.Update();
+                        tabplayer.Subscribe(tab);
+                        player.Update();
+                        player.Subscribe(client);
+
                         client.Message(new ChatText("System Test Message"));
 
                         Border border = new();

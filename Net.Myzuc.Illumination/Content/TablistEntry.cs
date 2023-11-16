@@ -17,6 +17,7 @@ namespace Net.Myzuc.Illumination.Content
         public string Name { get; }
         public IReadOnlyCollection<Property> Properties { get; }
         public Updateable<Gamemode> Gamemode { get; }
+        public Updateable<bool> Visible { get; }
         public Updateable<int> Latency { get; }
         public Updateable<ChatComponent?> Display { get; }
         public TablistEntry(Guid id, string name, ReadOnlyCollection<Property>? properties = null)
@@ -25,6 +26,7 @@ namespace Net.Myzuc.Illumination.Content
             Name = name;
             Properties = properties ?? new List<Property>().AsReadOnly();
             Gamemode = new(Structs.Gamemode.Survival, Lock);
+            Visible = new(true, Lock);
             Latency = new(-1, Lock);
             Display = new(null, Lock);
         }
@@ -35,13 +37,18 @@ namespace Net.Myzuc.Illumination.Content
                 if (!Gamemode.Updated && !Latency.Updated && !Display.Updated) return;
                 using ContentStream mso = new();
                 mso.WriteS32V(58);
-                mso.WriteU8((byte)((Gamemode.Updated ? 4 : 0) | (Latency.Updated ? 16 : 0) | (Display.Updated ? 32 : 0)));
+                mso.WriteU8((byte)((Gamemode.Updated ? 4 : 0) | (Visible.Updated ? 8 : 0) | (Latency.Updated ? 16 : 0) | (Display.Updated ? 32 : 0)));
                 mso.WriteS32V(1);
                 mso.WriteGuid(Id);
                 if (Gamemode.Updated)
                 {
                     mso.WriteS32V((int)Gamemode.PostUpdate);
                     Gamemode.Update();
+                }
+                if (Visible.Updated)
+                {
+                    mso.WriteBool(Visible.PostUpdate);
+                    Visible.Update();
                 }
                 if (Latency.Updated)
                 {

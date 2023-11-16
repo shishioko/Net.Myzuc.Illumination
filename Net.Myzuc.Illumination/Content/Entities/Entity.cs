@@ -5,7 +5,8 @@ using Net.Myzuc.Illumination.Util;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Security.AccessControl;
+using System.IO;
+using System.Security.Cryptography;
 
 namespace Net.Myzuc.Illumination.Content.Entities
 {
@@ -114,18 +115,18 @@ namespace Net.Myzuc.Illumination.Content.Entities
 
             }
         }
-        public abstract int TypeId { get; }
+        public int TypeId { get; }
         public abstract double HitboxWidth { get; }
         public abstract double HitboxHeight { get; }
         public Guid Id { get; }
-        private object Lock { get; } = new();
+        internal object Lock { get; } = new();
         public Updateable<double> X { get; }
         public Updateable<double> Y { get; }
         public Updateable<double> Z { get; }
         public Updateable<float> Pitch { get; }
         public Updateable<float> Yaw { get; }
         public Updateable<float> HeadYaw { get; }
-        protected Updateable<int> ObjectData { get; }
+        protected int ObjectData { get; }
         public Updateable<EntityFlags> Flags { get; }
         public Updateable<TimeSpan> Air { get; }
         public Updateable<ChatComponent?> Display { get; }
@@ -134,17 +135,18 @@ namespace Net.Myzuc.Illumination.Content.Entities
         public Updateable<EntityPose> Pose { get; }
         public Updateable<TimeSpan> Frozen { get; }
 
-        private Dictionary<Guid, int> EntityIdLookup { get; } = new();
-        internal Entity(Guid id)
+        protected Dictionary<Guid, int> EntityIdLookup { get; } = new();
+        internal Entity(Guid id, int type, int data = 0)
         {
             Id = id;
+            TypeId = type;
             X = new(0.0d, Lock);
             Y = new(0.0d, Lock);
             Z = new(0.0d, Lock);
             Pitch = new(0.0f, Lock);
             Yaw = new(0.0f, Lock);
             HeadYaw = new(0.0f, Lock);
-            ObjectData = new(0, Lock);
+            ObjectData = data;
             Flags = new(new(), Lock);
             Air = new(TimeSpan.FromSeconds(15), Lock);
             Display = new(null, Lock);
@@ -270,6 +272,12 @@ namespace Net.Myzuc.Illumination.Content.Entities
                 }
                 if (MetadataUpdated())
                 {
+                    byte[] msobp;
+                    using (ContentStream msob = new())
+                    {
+                        Serialize(msob, true);
+                        msobp = msob.Get().ToArray();
+                    }
                     Iterate((Client client) =>
                     {
                         int eid;
@@ -280,7 +288,8 @@ namespace Net.Myzuc.Illumination.Content.Entities
                         using ContentStream mso = new();
                         mso.WriteS32V(82);
                         mso.WriteS32V(eid);
-                        Serialize(mso);
+                        mso.WriteU8A(msobp);
+                        mso.WriteU8(255);
                         client.Send(mso.Get());
                     });
                 }
@@ -303,70 +312,23 @@ namespace Net.Myzuc.Illumination.Content.Entities
             {
                 EntityIdLookup.Add(client.Id, eid);
             }
-            using (ContentStream mso = new())
-            {
-                mso.WriteS32V(1);
-                mso.WriteS32V(eid);
-                mso.WriteGuid(Id);
-                mso.WriteS32V(TypeId);
-                lock (Lock)
-                {
-                    mso.WriteF64(X.PreUpdate);
-                    mso.WriteF64(Y.PreUpdate);
-                    mso.WriteF64(Z.PreUpdate);
-                    mso.WriteU8((byte)(Pitch.PreUpdate / 360.0f * 256.0f));
-                    mso.WriteU8((byte)(Yaw.PreUpdate / 360.0f * 256.0f));
-                    mso.WriteU8((byte)(HeadYaw.PreUpdate / 360.0f * 256.0f));
-                    mso.WriteS32V(ObjectData.PreUpdate);
-                }
-                mso.WriteU16(0);
-                mso.WriteU16(0);
-                mso.WriteU16(0);
-                client.Send(mso.Get());
-            }
-            using (ContentStream mso = new())
-            {
-                mso.WriteS32V(1);
-                mso.WriteS32V(eid);
-                mso.WriteGuid(Id);
-                mso.WriteS32V(TypeId);
-                lock (Lock)
-                {
-                    mso.WriteF64(X.PreUpdate);
-                    mso.WriteF64(Y.PreUpdate);
-                    mso.WriteF64(Z.PreUpdate);
-                    mso.WriteU8((byte)(Pitch.PreUpdate / 360.0f * 256.0f));
-                    mso.WriteU8((byte)(Yaw.PreUpdate / 360.0f * 256.0f));
-                    mso.WriteU8((byte)(HeadYaw.PreUpdate / 360.0f * 256.0f));
-                    mso.WriteS32V(ObjectData.PreUpdate);
-                }
-                mso.WriteU16(0);
-                mso.WriteU16(0);
-                mso.WriteU16(0);
-                client.Send(mso.Get());
-            }
-            using (ContentStream mso = new())
-            {
-                mso.WriteS32V(82);
-                mso.WriteS32V(eid);
-                Serialize(mso);
-                client.Send(mso.Get());
-            }
+            Spawn(client);
+            using ContentStream mso = new();
+            mso.WriteS32V(82);
+            mso.WriteS32V(eid);
+            Serialize(mso, false);
+            mso.WriteU8(255);
+            client.Send(mso.Get());
         }
         public override void Unsubscribe(Client client)
         {
             base.Unsubscribe(client);
-            using ContentStream mso = new();
-            mso.WriteS32V(62);
-            mso.WriteS32V(1);
+            Despawn(client);
             lock (client.SubscribedEntities)
             {
-                int eid = EntityIdLookup[client.Id];
                 lock (EntityIdLookup)
                 {
-                    mso.WriteS32V(eid);
-                    client.Send(mso.Get());
-                    client.SubscribedEntities.Remove(eid);
+                    client.SubscribedEntities.Remove(EntityIdLookup[client.Id]);
                 }
                 EntityIdLookup.Remove(client.Id);
             }
@@ -383,68 +345,105 @@ namespace Net.Myzuc.Illumination.Content.Entities
                 EntityIdLookup.Remove(client.Id);
             }
         }
-        public virtual void Serialize(ContentStream stream)
+        protected virtual void Spawn(Client client)
         {
+            using ContentStream mso = new();
+            mso.WriteS32V(1);
+            lock (EntityIdLookup)
+            {
+                mso.WriteS32V(EntityIdLookup[client.Id]);
+            }
+            mso.WriteGuid(Id);
+            mso.WriteS32V(TypeId);
             lock (Lock)
             {
-                if (Flags.Updated)
+                mso.WriteF64(X.PreUpdate);
+                mso.WriteF64(Y.PreUpdate);
+                mso.WriteF64(Z.PreUpdate);
+                mso.WriteU8((byte)(Pitch.PreUpdate / 360.0f * 256.0f));
+                mso.WriteU8((byte)(Yaw.PreUpdate / 360.0f * 256.0f));
+                mso.WriteU8((byte)(HeadYaw.PreUpdate / 360.0f * 256.0f));
+                mso.WriteS32V(ObjectData);
+            }
+            mso.WriteU16(0);
+            mso.WriteU16(0);
+            mso.WriteU16(0);
+            client.Send(mso.Get());
+        }
+        protected virtual void Despawn(Client client)
+        {
+            using ContentStream mso = new();
+            mso.WriteS32V(62);
+            mso.WriteS32V(1);
+            lock (client.SubscribedEntities)
+            {
+                lock (EntityIdLookup)
                 {
-                    stream.WriteU8(0);
-                    stream.WriteU8(0);
-                    stream.WriteU8(Flags.PostUpdate.Bitmask);
-                    Flags.Update();
-                }
-                if (Air.Updated)
-                {
-                    stream.WriteU8(1);
-                    stream.WriteU8(1);
-                    stream.WriteS32V((int)(Air.PostUpdate.TotalSeconds * 20.0d));
-                    Air.Update();
-                }
-                if (Display.Updated)
-                {
-                    if (Display.PostUpdate is not null)
-                    {
-                        stream.WriteU8(2);
-                        stream.WriteU8(6);
-                        stream.WriteString32V(JsonConvert.SerializeObject(Display.PostUpdate, new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore }));
-                    }
-                    stream.WriteU8(3);
-                    stream.WriteU8(8);
-                    stream.WriteBool(Display.PostUpdate is not null);
-                    Display.Update();
-                }
-                if (Silent.Updated)
-                {
-                    stream.WriteU8(4);
-                    stream.WriteU8(8);
-                    stream.WriteBool(Silent.PostUpdate);
-                    Silent.Update();
-                }
-                if (NoGravity.Updated)
-                {
-                    stream.WriteU8(5);
-                    stream.WriteU8(8);
-                    stream.WriteBool(NoGravity.PostUpdate);
-                    NoGravity.Update();
-                }
-                if (Pose.Updated)
-                {
-                    stream.WriteU8(6);
-                    stream.WriteU8(20);
-                    stream.WriteS32V((int)Pose.PostUpdate);
-                    Pose.Update();
-                }
-                if (Frozen.Updated)
-                {
-                    stream.WriteU8(7);
-                    stream.WriteU8(1);
-                    stream.WriteS32V((int)(Frozen.PostUpdate.TotalSeconds * 20.0d));
-                    Frozen.Update();
+                    mso.WriteS32V(EntityIdLookup[client.Id]);
+                    client.Send(mso.Get());
                 }
             }
         }
-        public virtual bool MetadataUpdated()
+        protected virtual void Serialize(ContentStream stream, bool update)
+        {
+            lock (Lock)
+            {
+                if (Flags.Updated || !update)
+                {
+                    stream.WriteU8(0);
+                    stream.WriteS32V(0);
+                    stream.WriteU8(Flags.PostUpdate.Bitmask);
+                    if (update) Flags.Update();
+                }
+                if (Air.Updated || !update)
+                {
+                    stream.WriteU8(1);
+                    stream.WriteS32V(1);
+                    stream.WriteS32V((int)(Air.PostUpdate.TotalSeconds * 20.0d));
+                    if (update) Air.Update();
+                }
+                if (Display.Updated || !update)
+                {
+                    stream.WriteU8(2);
+                    stream.WriteS32V(6);
+                    stream.WriteBool(Display.PostUpdate is not null);
+                    if (Display.PostUpdate is not null) stream.WriteString32V(JsonConvert.SerializeObject(Display.PostUpdate, new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore }));
+                    stream.WriteU8(3);
+                    stream.WriteS32V(8);
+                    stream.WriteBool(Display.PostUpdate is not null);
+                    if (update) Display.Update();
+                }
+                if (Silent.Updated || !update)
+                {
+                    stream.WriteU8(4);
+                    stream.WriteS32V(8);
+                    stream.WriteBool(Silent.PostUpdate);
+                    if (update) Silent.Update();
+                }
+                if (NoGravity.Updated || !update)
+                {
+                    stream.WriteU8(5);
+                    stream.WriteS32V(8);
+                    stream.WriteBool(NoGravity.PostUpdate);
+                    if (update) NoGravity.Update();
+                }
+                if (Pose.Updated || !update)
+                {
+                    stream.WriteU8(6);
+                    stream.WriteS32V(20);
+                    stream.WriteS32V((int)Pose.PostUpdate);
+                    if (update) Pose.Update();
+                }
+                if (Frozen.Updated || !update)
+                {
+                    stream.WriteU8(7);
+                    stream.WriteS32V(1);
+                    stream.WriteS32V((int)(Frozen.PostUpdate.TotalSeconds * 20.0d));
+                    if (update) Frozen.Update();
+                }
+            }
+        }
+        protected virtual bool MetadataUpdated()
         {
             return Flags.Updated || Air.Updated || Display.Updated || Silent.Updated || NoGravity.Updated || Pose.Updated || Frozen.Updated;
         }

@@ -51,7 +51,6 @@ namespace Net.Myzuc.Illumination.Content
                 mso.WriteU8(9);
                 mso.WriteString16("value");
                 mso.WriteU8(10);
-                mso.WriteS32(30);
                 string[] damages = {
                 "minecraft:generic_kill",
                 "minecraft:dragon_breath",
@@ -83,7 +82,9 @@ namespace Net.Myzuc.Illumination.Content
                 "minecraft:dry_out",
                 "minecraft:hot_floor",
                 "minecraft:fly_into_wall",
+                "minecraft:player_attack", //TODO: all vanilla types
                 };
+                mso.WriteS32(damages.Length);
                 for (int i = 0; i < damages.Length; i++)
                 {
                     mso.WriteU8(8);
