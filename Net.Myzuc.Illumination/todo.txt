@@ -1,4 +1,4 @@
-﻿entities
+﻿more entities
 particles
 
 move to assigning stuff instead of subscribing
@@ -9,3 +9,5 @@ tablist keep track publicly of entries
 biome particles, dont forget to add to dimension packet login
 
 replace count >0 with .Any
+
+add keepalive timeout for pre play state connections

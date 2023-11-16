@@ -12,7 +12,7 @@ namespace Net.Myzuc.Illumination.Content
 {
     public sealed class TablistEntry : Subscribeable<Tablist>, IUpdateable, IIdentifiable
     {
-        public object Lock { get; } = new();
+        private object Lock { get; } = new();
         public Guid Id { get; }
         public string Name { get; }
         public IReadOnlyCollection<Property> Properties { get; }
