@@ -1,14 +1,14 @@
 ﻿using System;
-using Net.Myzuc.Illumination.Net;
+using Me.Shishioko.Illumination.Net;
 using System.Net;
 using System.IO;
 using System.Net.Sockets;
 using System.IO.Compression;
 using Newtonsoft.Json;
-using Net.Myzuc.Illumination.Chat;
-using Net.Myzuc.Illumination.Status;
+using Me.Shishioko.Illumination.Chat;
+using Me.Shishioko.Illumination.Status;
 
-namespace Net.Myzuc.Illumination.Base
+namespace Me.Shishioko.Illumination.Base
 {
     public sealed class Connection : IDisposable
     {
@@ -75,7 +75,7 @@ namespace Net.Myzuc.Illumination.Base
                         {
                             Color = "red"
                         },
-                        Version = new("Net.Myzuc.Illumination 1.19.4", -1)
+                        Version = new("Me.Shishioko.Illumination 1.19.4", -1)
                     }, new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore });
                     using (ContentStream mso = new())
                     {

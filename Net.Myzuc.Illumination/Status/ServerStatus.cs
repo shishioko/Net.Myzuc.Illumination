@@ -1,9 +1,9 @@
-﻿using Net.Myzuc.Illumination.Chat;
+﻿using Me.Shishioko.Illumination.Chat;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 
-namespace Net.Myzuc.Illumination.Status
+namespace Me.Shishioko.Illumination.Status
 {
     public sealed class ServerStatus
     {

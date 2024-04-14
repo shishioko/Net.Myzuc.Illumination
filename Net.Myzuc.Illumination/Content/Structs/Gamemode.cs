@@ -1,4 +1,4 @@
-﻿namespace Net.Myzuc.Illumination.Content.Structs
+﻿namespace Me.Shishioko.Illumination.Content.Structs
 {
     public enum Gamemode : byte
     {

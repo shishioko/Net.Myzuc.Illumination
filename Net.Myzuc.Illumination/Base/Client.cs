@@ -1,9 +1,9 @@
-﻿using Net.Myzuc.Illumination.Chat;
-using Net.Myzuc.Illumination.Content;
-using Net.Myzuc.Illumination.Content.Entities;
-using Net.Myzuc.Illumination.Content.Structs;
-using Net.Myzuc.Illumination.Net;
-using Net.Myzuc.Illumination.Util;
+﻿using Me.Shishioko.Illumination.Chat;
+using Me.Shishioko.Illumination.Content;
+using Me.Shishioko.Illumination.Content.Entities;
+using Me.Shishioko.Illumination.Content.Structs;
+using Me.Shishioko.Illumination.Net;
+using Me.Shishioko.Illumination.Util;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Concurrent;
@@ -12,7 +12,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
 
-namespace Net.Myzuc.Illumination.Base
+namespace Me.Shishioko.Illumination.Base
 {
     public sealed class Client : IDisposable, IIdentifiable
     {
@@ -36,6 +36,7 @@ namespace Net.Myzuc.Illumination.Base
         private ConcurrentQueue<byte[]> PacketQueue { get; }
         private SemaphoreSlim PacketSemaphore { get; }
         public DateTime LastKeepAlive { get; private set; }
+        private bool IsDisposed { get; set; }
         internal Client(LoginRequest login)
         {
             Disposed = () => { };
@@ -53,6 +54,7 @@ namespace Net.Myzuc.Illumination.Base
             PacketSemaphore = new(1, 1);
             Connection.Disposed += Dispose;
             LastKeepAlive = DateTime.Now;
+            IsDisposed = false;
         }
         public void Message(ChatComponent chat, bool overlay = false)
         {
@@ -73,7 +75,8 @@ namespace Net.Myzuc.Illumination.Base
         }
         public void Dispose()
         {
-            if (Connection.IsDisposed) return;
+            if (IsDisposed) return;
+            IsDisposed = true;
             Connection.Disposed -= Dispose;
             lock (SubscribedEntities)
             {

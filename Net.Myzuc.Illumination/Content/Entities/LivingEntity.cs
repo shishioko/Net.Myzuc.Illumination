@@ -1,10 +1,10 @@
-﻿using Net.Myzuc.Illumination.Content.Structs;
-using Net.Myzuc.Illumination.Net;
-using Net.Myzuc.Illumination.Util;
+﻿using Me.Shishioko.Illumination.Content.Structs;
+using Me.Shishioko.Illumination.Net;
+using Me.Shishioko.Illumination.Util;
 using System;
 using System.Drawing;
 
-namespace Net.Myzuc.Illumination.Content.Entities
+namespace Me.Shishioko.Illumination.Content.Entities
 {
     public abstract class LivingEntity : Entity
     {

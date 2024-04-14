@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33205.214
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Net.Myzuc.Illumination", "Net.Myzuc.Illumination\Net.Myzuc.Illumination.csproj", "{4C2CBB94-0E88-4C52-9437-E4D9B8B2ED96}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Me.Shishioko.Illumination", "Net.Myzuc.Illumination\Me.Shishioko.Illumination.csproj", "{4C2CBB94-0E88-4C52-9437-E4D9B8B2ED96}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Me.Shishioko.Illumination.Bin.Test", "Me.Shishioko.Illumination.Bin.Test\Me.Shishioko.Illumination.Bin.Test.csproj", "{FB8A3765-1479-4F72-909E-11F8AC923531}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{4C2CBB94-0E88-4C52-9437-E4D9B8B2ED96}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4C2CBB94-0E88-4C52-9437-E4D9B8B2ED96}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4C2CBB94-0E88-4C52-9437-E4D9B8B2ED96}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FB8A3765-1479-4F72-909E-11F8AC923531}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FB8A3765-1479-4F72-909E-11F8AC923531}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FB8A3765-1479-4F72-909E-11F8AC923531}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FB8A3765-1479-4F72-909E-11F8AC923531}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,9 +1,9 @@
-﻿using Net.Myzuc.Illumination.Base;
-using Net.Myzuc.Illumination.Net;
-using Net.Myzuc.Illumination.Util;
+﻿using Me.Shishioko.Illumination.Base;
+using Me.Shishioko.Illumination.Net;
+using Me.Shishioko.Illumination.Util;
 using System;
 
-namespace Net.Myzuc.Illumination.Content
+namespace Me.Shishioko.Illumination.Content
 {
     public sealed class Border : Subscribeable<Client>, IUpdateable
     {

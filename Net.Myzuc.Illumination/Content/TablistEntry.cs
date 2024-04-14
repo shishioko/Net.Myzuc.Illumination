@@ -1,18 +1,18 @@
-﻿using Net.Myzuc.Illumination.Base;
-using Net.Myzuc.Illumination.Chat;
-using Net.Myzuc.Illumination.Content.Structs;
-using Net.Myzuc.Illumination.Net;
-using Net.Myzuc.Illumination.Util;
+﻿using Me.Shishioko.Illumination.Base;
+using Me.Shishioko.Illumination.Chat;
+using Me.Shishioko.Illumination.Content.Structs;
+using Me.Shishioko.Illumination.Net;
+using Me.Shishioko.Illumination.Util;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
-namespace Net.Myzuc.Illumination.Content
+namespace Me.Shishioko.Illumination.Content
 {
     public sealed class TablistEntry : Subscribeable<Tablist>, IUpdateable, IIdentifiable
     {
-        private object Lock { get; } = new();
+        internal object Lock { get; } = new();
         public Guid Id { get; }
         public string Name { get; }
         public IReadOnlyCollection<Property> Properties { get; }
@@ -36,7 +36,7 @@ namespace Net.Myzuc.Illumination.Content
             {
                 if (!Gamemode.Updated && !Latency.Updated && !Display.Updated) return;
                 using ContentStream mso = new();
-                mso.WriteS32V(63);
+                mso.WriteS32V(58);
                 mso.WriteU8((byte)((Gamemode.Updated ? 4 : 0) | (Visible.Updated ? 8 : 0) | (Latency.Updated ? 16 : 0) | (Display.Updated ? 32 : 0)));
                 mso.WriteS32V(1);
                 mso.WriteGuid(Id);

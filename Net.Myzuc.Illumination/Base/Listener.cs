@@ -3,7 +3,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 
-namespace Net.Myzuc.Illumination.Base
+namespace Me.Shishioko.Illumination.Base
 {
     public sealed class Listener : IDisposable
     {

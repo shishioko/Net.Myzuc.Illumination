@@ -1,11 +1,11 @@
 ﻿using System;
-using Net.Myzuc.Illumination.Net;
+using Me.Shishioko.Illumination.Net;
 using Newtonsoft.Json;
-using Net.Myzuc.Illumination.Chat;
-using Net.Myzuc.Illumination.Util;
-using Net.Myzuc.Illumination.Base;
+using Me.Shishioko.Illumination.Chat;
+using Me.Shishioko.Illumination.Util;
+using Me.Shishioko.Illumination.Base;
 
-namespace Net.Myzuc.Illumination.Content
+namespace Me.Shishioko.Illumination.Content
 {
     public sealed class Bossbar : Subscribeable<Client>, IUpdateable, IIdentifiable
     {

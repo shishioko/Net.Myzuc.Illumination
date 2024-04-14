@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
 
-namespace Net.Myzuc.Illumination.Chat
+namespace Me.Shishioko.Illumination.Chat
 {
     public abstract class ChatComponent
     {

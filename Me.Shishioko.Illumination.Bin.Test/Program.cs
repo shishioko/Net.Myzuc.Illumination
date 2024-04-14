@@ -1,17 +1,17 @@
-﻿using Net.Myzuc.Illumination.Base;
-using Net.Myzuc.Illumination.Chat;
-using Net.Myzuc.Illumination.Content;
-using Net.Myzuc.Illumination.Content.Entities;
-using Net.Myzuc.Illumination.Content.Structs;
+﻿using Me.Shishioko.Illumination.Base;
+using Me.Shishioko.Illumination.Chat;
+using Me.Shishioko.Illumination.Content;
+using Me.Shishioko.Illumination.Content.Entities;
+using Me.Shishioko.Illumination.Content.Structs;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Net;
 using System.Text.Json;
 using System.Threading;
-using static Net.Myzuc.Illumination.Status.ServerStatus;
+using static Me.Shishioko.Illumination.Status.ServerStatus;
 
-namespace Net.Myzuc.Illumination
+namespace Me.Shishioko.Illumination.Bin.Test
 {
     internal class Program
     {
@@ -44,7 +44,7 @@ namespace Net.Myzuc.Illumination
                                 }
                             }
                         },
-                        Version = new("Net.Myzuc.Illumination", 763),
+                        Version = new("Me.Shishioko.Illumination", 763),
                         Players = new()
                         {
                             Max = 0,

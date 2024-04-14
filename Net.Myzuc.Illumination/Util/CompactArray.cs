@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 
-namespace Net.Myzuc.Illumination.Util
+namespace Me.Shishioko.Illumination.Util
 {
     public sealed class CompactArray : IEnumerable<int>
     {

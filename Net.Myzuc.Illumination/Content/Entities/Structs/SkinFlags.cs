@@ -1,4 +1,4 @@
-﻿namespace Net.Myzuc.Illumination.Content.Entities.Structs
+﻿namespace Me.Shishioko.Illumination.Content.Entities.Structs
 {
     public struct SkinFlags
     {

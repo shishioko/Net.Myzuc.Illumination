@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Net.Myzuc.Illumination.Util
+namespace Me.Shishioko.Illumination.Util
 {
     public abstract class Subscribeable<SubscriberType> where SubscriberType : IIdentifiable
     {

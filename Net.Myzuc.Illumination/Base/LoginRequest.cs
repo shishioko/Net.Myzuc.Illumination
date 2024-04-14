@@ -1,4 +1,4 @@
-﻿using Net.Myzuc.Illumination.Net;
+﻿using Me.Shishioko.Illumination.Net;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -11,11 +11,11 @@ using System.Text;
 using Newtonsoft.Json;
 using System.Text.Json;
 using System.Threading;
-using Net.Myzuc.Illumination.Chat;
+using Me.Shishioko.Illumination.Chat;
 using System.Collections.ObjectModel;
-using Net.Myzuc.Illumination.Content.Structs;
+using Me.Shishioko.Illumination.Content.Structs;
 
-namespace Net.Myzuc.Illumination.Base
+namespace Me.Shishioko.Illumination.Base
 {
     public sealed class LoginRequest
     {

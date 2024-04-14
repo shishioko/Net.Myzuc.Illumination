@@ -11,3 +11,5 @@ biome particles, dont forget to add to dimension packet login
 replace count >0 with .Any
 
 add keepalive timeout for pre play state connections
+
+update enumerables to read only ones

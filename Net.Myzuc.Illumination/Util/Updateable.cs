@@ -1,4 +1,4 @@
-﻿namespace Net.Myzuc.Illumination.Util
+﻿namespace Me.Shishioko.Illumination.Util
 {
     public sealed class Updateable<T>
     {

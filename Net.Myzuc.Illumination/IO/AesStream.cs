@@ -7,7 +7,7 @@ using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
 
-namespace Net.Myzuc.Illumination
+namespace Me.Shishioko.Illumination
 {
     internal class AesStream : Stream
     {

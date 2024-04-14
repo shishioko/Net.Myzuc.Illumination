@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Net.Myzuc.Illumination.Chat
+namespace Me.Shishioko.Illumination.Chat
 {
     public sealed class ItemPreview
     {

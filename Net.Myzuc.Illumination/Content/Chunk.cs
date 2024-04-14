@@ -1,13 +1,13 @@
-﻿using Net.Myzuc.Illumination.Base;
-using Net.Myzuc.Illumination.Content.Structs;
-using Net.Myzuc.Illumination.Net;
-using Net.Myzuc.Illumination.Util;
+﻿using Me.Shishioko.Illumination.Base;
+using Me.Shishioko.Illumination.Content.Structs;
+using Me.Shishioko.Illumination.Net;
+using Me.Shishioko.Illumination.Util;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
 
-namespace Net.Myzuc.Illumination.Content
+namespace Me.Shishioko.Illumination.Content
 {
     public sealed class Chunk : Subscribeable<Client>, IUpdateable
     {

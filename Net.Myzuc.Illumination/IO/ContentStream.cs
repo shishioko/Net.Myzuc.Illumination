@@ -8,7 +8,7 @@ using System.Net;
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace Net.Myzuc.Illumination.Net
+namespace Me.Shishioko.Illumination.Net
 {
     public sealed class ContentStream : IDisposable
     {
